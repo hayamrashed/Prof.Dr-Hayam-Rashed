@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <title>Patient Report</title>
+  <link rel="stylesheet" href="Printt.css">
+  <link rel="stylesheet" href="print.css" media="print">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/qrious@4.0.2/dist/qrious.min.js"></script>
+
+</head>
+
+<style>
+  .site-header {
+  background-color: #04243f;
+  color: white;
+  padding: 15px 0;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.container {
+  width: 90%;
+  margin: auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+}
+
+.logo-img {
+  width: 50px; /* حجم اللوجو */
+  height: 50px;
+  object-fit: contain;
+  margin-right: 10px; /* مسافة بين الصورة والنص */
+}
+
+.logo h1 {
+  margin: 0;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+
+.nav-links {
+  display: flex;
+}
+
+.nav-links a {
+  color: white;
+  text-decoration: none;
+  margin-left: 20px;
+  font-size: 16px;
+  transition: color 0.3s;
+}
+
+.nav-links a:hover {
+  color: #4CAF50;
+}
+
+/* أيقونة المينو */
+.menu-icon {
+  display: none;
+  font-size: 26px;
+  cursor: pointer;
+}
+
+/* موبايل */
+@media (max-width: 768px) {
+  .nav-links {
+    display: none;
+    flex-direction: column;
+    background-color: #04243f;
+    position: absolute;
+    top: 60px;
+    right: 0;
+    width: 200px;
+    border-radius: 0 0 10px 10px;
+    overflow: hidden;
+  }
+
+  .nav-links a {
+    padding: 10px;
+    margin: 0;
+    border-bottom: 1px solid #4CAF50;
+  }
+
+  .menu-icon {
+    display: block;
+  }
+}
+
+</style>
+
+<body>
+
+<div id="patientReport" class="report-container">
+  <h2 class="centered"><br></h2>
+  <div class="signature">
+    <br><br>
+    <div class="right-signature"></div>
+  </div>
+  <div class="signature">
+    <br><br>
+    <div class="right-signature"></div>
+  </div>
+  <div class="signature">
+    <br><br>
+    <div class="right-signature"></div>
+  </div>
+
+  <div class="info-row">
+    <div><strong>Patient Name:</strong> <span id="patient_name"></span></div>
+    <div><strong>Age:</strong> <span id="age"></span></div>
+    <div><strong>Sex:</strong> <span id="sex"></span></div>
+  </div>
+
+  <div class="info-row">
+    <div><strong>Date Report Issued:</strong> <span id="date_report_issued"></span></div>
+    <div><strong>Specimen Received Date:</strong> <span id="specimen_received_date"></span></div>
+  </div>
+
+  <div class="info-row single">
+    <div><strong>Referred By:</strong> <span id="referred_by"></span></div>
+  </div>
+
+  <div class="info-row single">
+    <div><strong>Patient Code:</strong> <span id="code"></span></div>
+  </div>
+
+  <hr>
+
+  <h3 class="centered">IMMUNOHISTOCHEMISTRY REPORT</h3>
+
+  <div class="info-column">
+    <div class="bold-title">
+      <span class="label">Clinical Data:</span> <span id="clinical_data"></span>
+    </div>
+    
+    <div class="bold-title">
+      <span class="label">Specimen:</span> <span id="specimen"></span>
+    </div>
+    
+    <div class="bold-title">
+      <span class="label">Procedure:</span> <span id="procedure"></span>
+    </div>
+    
+    <div class="bold-title">
+      <span class="label">Results:</span> <span id="results"></span>
+    </div>
+    <br>
+    <div class="bold-title">
+      <span class="label">Diagnosis:</span> <span id="diagnosis"></span>
+    </div>
+  </div>
+  <div class="signature">
+    <br><br>
+    <div class="right-signature">PROF - DR HAYAM RASHED</div>
+  </div>
+  <div class="signature">
+    <br><br>
+    <div class="right-signature"></div>
+  </div>
+  <h2 class="centered"><br></h2>
+  <div class="signature">
+    <br><br>
+    <div class="right-signature"></div>
+  </div>
+  <div class="signature">
+    <br><br>
+    <div class="right-signature"></div>
+  </div>
+  <div class="signature">
+    <br><br>
+    <div class="right-signature"></div>
+  </div>
+</div>
+
+<div class="buttons">
+  <button onclick="printReport()">Print PDF</button>
+  <button onclick="saveAsImage()">Download as Image</button>
+  <button onclick="window.location.href='photo.html'">Load Visual Data Photos</button>
+  <button onclick="generateAndDownloadQR()">QR Code</button>
+  <button onclick="window.location.href='edit_patient1.html'">edit</button>
+  <button onclick="history.back()" style="padding: 10px 20px; background-color: #007bff; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 16px;">
+    رجوع للخلف
+  </button>
+  
+</div>
+
+<div id="photosSection" class="photos-section"></div>
+
+<script src="patient.js"></script>    <!-- تحميل بيانات المريض -->
+<script src="print.js"></script>      <!-- كود الطباعة -->
+
+
+</body>
+</html>
