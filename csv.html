@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8" />
+  <title>تصدير تقارير المرضى</title>
+  <script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.3.0/exceljs.min.js"></script>
+
+  <style>
+    body {
+      font-family: 'Cairo', sans-serif;
+      background: #f0f4f8;
+      text-align: center;
+      padding: 40px;
+      direction: rtl;
+    }
+
+    h2 {
+      font-size: 32px;
+      color: #333;
+      margin-bottom: 30px;
+      animation: fadeInDown 1s ease;
+    }
+
+    button {
+        margin-top: 190px; /* الهامش العلوي */
+      background-color: #29235f;
+      color: white;
+      border: none;
+      padding: 15px 30px;
+      font-size: 18px;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background-color 0.3s, transform 0.2s;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    button:hover {
+      background-color: #6fafa1;
+      transform: translateY(-3px);
+    }
+
+    @keyframes fadeInDown {
+      from {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* الهيدر */
+    .site-header {
+      background-color: #04243f;
+      color: white;
+      padding: 15px 0;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+    .container {
+      width: 90%;
+      margin: auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: relative;
+    }
+    .logo {
+  display: flex;
+  align-items: center;
+}
+
+.logo-img {
+  width: 50px; /* حجم اللوجو */
+  height: 50px;
+  object-fit: contain;
+  margin-right: 10px; /* مسافة بين الصورة والنص */
+}
+
+.logo h1 {
+  margin: 0;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+    .nav-links {
+      display: flex;
+    }
+    .nav-links a {
+      color: white;
+      text-decoration: none;
+      margin-left: 20px;
+      font-size: 16px;
+      transition: color 0.3s;
+    }
+    .nav-links a:hover {
+      color: #4CAF50;
+    }
+    .menu-icon {
+      display: none;
+      font-size: 26px;
+      cursor: pointer;
+    }
+    .hero {
+    background-image: url('my-background.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    color: white;
+    padding: 50px 30px;
+    direction: rtl;
+    position: relative;
+    z-index: 1;
+  }
+
+  .hero::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: -1;
+  }
+
+  .hero-header {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 30px;
+  }
+
+  .hero-logo-box {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+  }
+
+  .hero-logo-img {
+    width: 150px;
+    height: 150px;
+    object-fit: contain;
+  }
+
+  .hero-lab-name {
+    font-size: 26px;
+    line-height: 1.4;
+    margin: 0;
+    text-align: right;
+  }
+
+  .hero-body {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 60px;
+  }
+
+  .hero-logo-box {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+  animation: fadeIn 2s ease forwards;
+}
+
+.text-content {
+  flex: 1;
+  font-size: 18px;
+  line-height: 2;
+  max-width: 600px;
+  text-align: right;
+  opacity: 0;
+  animation: fadeSlideRight 1.5s ease forwards;
+  animation-delay: 0.5s;
+}
+
+.image-content {
+  
+  flex: 1;
+  text-align: center;
+  opacity: 0;
+  animation: fadeSlideLeft 1.5s ease forwards;
+  animation-delay: 0.5s;
+}
+
+
+.hero-image {
+  width: 300px;
+  height: 300px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 6px solid white;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  transition: transform 0.5s ease, box-shadow 0.5s ease;
+}
+
+.hero-image:hover {
+  transform: scale(2) rotate(1.5deg); /* تكبير + دوران بسيط */
+  box-shadow: 0 12px 25px rgba(0, 140, 255, 0.3); /* توهج أزرق خفيف */
+}
+
+
+  /* موبايل */
+  @media (max-width: 768px) {
+    .hero-body {
+      flex-direction: column;
+    }
+
+    .hero-header {
+      flex-direction: column;
+    }
+
+    .hero-logo-box {
+      flex-direction: column;
+      text-align: center;
+    }
+
+    .text-content, .image-content {
+      max-width: 100%;
+    }
+
+    .hero-image {
+      width: 200px;
+      height: 200px;
+    }
+  }
+  @keyframes fadeSlideRight {
+  from {
+    opacity: 0;
+    transform: translateX(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes fadeSlideLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+footer {
+  background: #031a2d;
+  color: white;
+  text-align: center;
+  padding: 15px 10px;
+  font-size: 14px;
+  margin-top: 170px; /* الهامش العلوي */
+}
+
+
+.footer-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.footer-content span {
+  margin-right: 15px; /* المسافة بين النص والأيقونات */
+}
+
+.social-icons a {
+  margin: 0 10px;
+  color: white;
+  font-size: 20px;
+  text-decoration: none;
+}
+
+.social-icons a:hover {
+  color: #ff9800; /* تغيير اللون عند التمرير */
+}
+
+
+/* موبايل */
+@media (max-width: 768px) {
+  .nav-links {
+    display: none;
+    flex-direction: column;
+    background-color: #04243f;
+    position: absolute;
+    top: 60px;
+    right: 0;
+    width: 200px;
+    border-radius: 0 0 10px 10px;
+    overflow: hidden;
+  }
+
+  .nav-links a {
+    padding: 10px;
+    margin: 0;
+    border-bottom: 1px solid #4CAF50;
+  }
+
+  .menu-icon {
+    display: block;
+  }
+}
+
+  </style>
+</head>
+<header class="site-header">
+    <div class="container">
+      <div class="logo">
+        <img src="logo.png" alt="Logo" class="logo-img">
+        <h1>Prof.Dr Hayam Rashed</h1>
+      </div>
+  
+      <nav class="nav-links" id="navLinks">
+        <a href="index.html">Home</a>
+        <a href="search.html">search&Reports</a>
+        <a href="Cytology Report.html">Cytology Report</a>
+        <a href="Pathology Report.html">Pathology Report</a>
+        <a href="IHC Report.html">IHC Report</a>
+        <a href="csv.html">csv</a>
+      </nav>
+  
+      <div class="menu-icon" onclick="toggleMenu()">☰</div>
+    </div>
+  
+    <script>
+      function toggleMenu() {
+        var nav = document.getElementById('navLinks');
+        if (nav.style.display === "flex") {
+          nav.style.display = "none";
+        } else {
+          nav.style.display = "flex";
+        }
+      }
+    </script>
+  </header>
+<body>
+  <h2>تصدير الجداول:</h2>
+  <button onclick="exportTable('immunohistochemistry')">immunohistochemistry </button>
+  <button onclick="exportTable('pathology')">pathology </button>
+  <button onclick="exportTable('cytology')">cytology </button>
+
+  <script>
+    const bucketName = 'photo';
+
+    const tableConfigs = {
+      immunohistochemistry: {
+        url: "https://bnmgxpkqjhhhccaroibc.supabase.co",
+        key: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJubWd4cGtxamhoaGNjYXJvaWJjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDU2ODM1ODksImV4cCI6MjA2MTI1OTU4OX0.tnIIQZWYr5NuZfjTWAdMgPYde6wTIFq08secQnqAnRs",
+        table: "immunohistochemistry_report",
+      },
+      pathology: {
+        url: "https://fbxphgrumfifpanlkbzd.supabase.co",
+        key: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZieHBoZ3J1bWZpZnBhbmxrYnpkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDU4Mzg1NTQsImV4cCI6MjA2MTQxNDU1NH0.gaS2hTxSTniuedtKxTStMKC4e-72Y554aYTYGKEBoDE",
+        table: "pathology_report",
+      },
+      cytology: {
+        url: "https://bimyioebtynlhxqzwqge.supabase.co",
+        key: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJpbXlpb2VidHlubGh4cXp3cWdlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDU4Mzg2OTAsImV4cCI6MjA2MTQxNDY5MH0.dDvpl3X5H4hQ9BSFXEdg_eV0NJVF7K8FcNJ-R5-HEcw",
+        table: "cytology_reports",
+      }
+    };
+
+    async function exportTable(type) {
+      const config = tableConfigs[type];
+      if (!config) {
+        alert("إعدادات الجدول غير موجودة.");
+        return;
+      }
+
+      const response = await fetch(`${config.url}/rest/v1/${config.table}?select=*`, {
+        headers: {
+          apikey: config.key,
+          Authorization: `Bearer ${config.key}`
+        }
+      });
+
+      const patients = await response.json();
+      if (!patients || patients.length === 0) {
+        alert("لا توجد بيانات في الجدول.");
+        return;
+      }
+
+      const workbook = new ExcelJS.Workbook();
+      const sheet = workbook.addWorksheet("المرضى");
+
+      // إعداد الأعمدة بناءً على أول عنصر + عمود الصورة
+      const firstPatient = patients[0] || {};
+      const columns = [{ header: "الصورة", key: "photo", width: 20 }];
+      for (const key in firstPatient) {
+        if (key !== "photo_url") {
+          columns.push({ header: key, key: key, width: 25 });
+        }
+      }
+      sheet.columns = columns;
+
+      for (const patient of patients) {
+        const rowData = { ...patient };
+        delete rowData.photo_url;
+        const row = sheet.addRow(rowData);
+        const rowNumber = row.number;
+
+        if (patient.photo_url) {
+          const imageUrl = `${config.url}/storage/v1/object/public/${bucketName}/${patient.photo_url}`;
+          try {
+            const imageBlob = await fetch(imageUrl).then(res => res.blob());
+            const buffer = await imageBlob.arrayBuffer();
+
+            const imageId = workbook.addImage({
+              buffer,
+              extension: 'png',
+            });
+
+            sheet.addImage(imageId, {
+              tl: { col: 0, row: rowNumber - 1 },
+              ext: { width: 100, height: 100 },
+              editAs: "oneCell"
+            });
+
+            sheet.getRow(rowNumber).height = 80;
+          } catch (error) {
+            console.error("فشل تحميل الصورة:", error);
+          }
+        }
+      }
+
+      const buffer = await workbook.xlsx.writeBuffer();
+      const blob = new Blob([buffer], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = `${type}_patients.xlsx`;
+      link.click();
+    }
+  </script>
+
+<footer>
+    <div class="footer-content">
+      <div class="social-icons">
+        <a href="https://www.facebook.com/mohamed.alsayed.219557/?locale=ar_AR" target="_blank"><i class="fab fa-facebook"></i></a>
+        <a href="tel:+01004335462"><i class="fas fa-phone-alt"></i></a>
+        <a href="https://wa.me/01004335462" target="_blank"><i class="fab fa-whatsapp"></i></a> <!-- رابط WhatsApp -->
+        <span>Copyright © 2025 – Prof.Dr Hayam Rashed || Developed by Mohamed Elsayed</span>
+      </div>
+    </div>
+  </footer>
+  
+  <!-- رابط لأيقونات FontAwesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</body>
+</html>
