@@ -10,81 +10,49 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
   <style>
-    .site-header {
-      background-color: #04243f;
-      color: white;
-      padding: 15px 0;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-      position: sticky;
-      top: 0;
-      z-index: 1000;
+    /* ... (نفس التنسيقات الأصلية) ... */
+    #toolbar button, #toolbar select {
+      margin-left: 5px;
+      padding: 5px 10px;
+      font-size: 14px;
     }
-    .container {
+    #toolbar {
+      background: #eee;
+      border: 1px solid #ccc;
+      padding: 5px;
+      margin: 10px auto;
       width: 90%;
-      margin: auto;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      position: relative;
+      text-align: center;
+      border-radius: 5px;
     }
-    .logo {
-      display: flex;
-      align-items: center;
+      @media print {
+    #toolbar {
+      display: none !important;
     }
-    .logo-img {
-      width: 50px;
-      height: 50px;
-      object-fit: contain;
-      margin-right: 10px;
-    }
-    .logo h1 {
-      margin: 0;
-      font-size: 24px;
-      font-weight: bold;
-    }
-    .nav-links {
-      display: flex;
-    }
-    .nav-links a {
-      color: white;
-      text-decoration: none;
-      margin-left: 20px;
-      font-size: 16px;
-      transition: color 0.3s;
-    }
-    .nav-links a:hover {
-      color: #4CAF50;
-    }
-    .menu-icon {
-      display: none;
-      font-size: 26px;
-      cursor: pointer;
-    }
-    @media (max-width: 768px) {
-      .nav-links {
-        display: none;
-        flex-direction: column;
-        background-color: #04243f;
-        position: absolute;
-        top: 60px;
-        right: 0;
-        width: 200px;
-        border-radius: 0 0 10px 10px;
-        overflow: hidden;
-      }
-      .nav-links a {
-        padding: 10px;
-        margin: 0;
-        border-bottom: 1px solid #4CAF50;
-      }
-      .menu-icon {
-        display: block;
-      }
-    }
+  }
   </style>
 </head>
 
 <body>
+
+<!-- شريط أدوات التنسيق -->
+<div id="toolbar">
+  <button type="button" onclick="document.execCommand('bold', false, null)">غــامق</button>
+  <button type="button" onclick="document.execCommand('underline', false, null)">تسطير</button>
+  <button type="button" onclick="document.execCommand('italic', false, null)">مائل</button>
+  <select onchange="document.execCommand('fontName', false, this.value)">
+    <option value="Arial">Arial</option>
+    <option value="Tahoma">Tahoma</option>
+    <option value="Courier New">Courier New</option>
+    <option value="Times New Roman">Times New Roman</option>
+  </select>
+  <select onchange="document.execCommand('fontSize', false, this.value)">
+    <option value="1">صغير</option>
+    <option value="3" selected>متوسط</option>
+    <option value="5">كبير</option>
+    <option value="7">ضخم</option>
+  </select>
+</div>
 
 <div id="patientReport" class="report-container">
   <h2 class="centered"><br></h2>
@@ -101,23 +69,23 @@
     <div class="right-signature"></div>
   </div>
 
-  <div id="patientReport">
+  <div id="patientReportContent">
     <div class="info-row">
-      <div class="wide-field"><strong>Patient Name:</strong> <span id="patient_name"></span></div>
-      <div><strong>Age:</strong> <span id="age"></span></div>
-      <div><strong>Sex:</strong> <span id="sex"></span></div>
+      <div class="wide-field"><strong>Patient Name:</strong> <span id="patient_name" contenteditable="true">اسم المريض</span></div>
+      <div><strong>Age:</strong> <span id="age" contenteditable="true">30</span></div>
+      <div><strong>Sex:</strong> <span id="sex" contenteditable="true">ذكر</span></div>
     </div>
   
     <div class="info-row">
-      <div><strong>Specimen Received Date:</strong> <span id="specimen_received_date"></span></div>
-      <div><strong>Date Report Issued:</strong> <span id="date_report_issued"></span></div>
+      <div><strong>Specimen Received Date:</strong> <span id="specimen_received_date" contenteditable="true">2025-05-20</span></div>
+      <div><strong>Date Report Issued:</strong> <span id="date_report_issued" contenteditable="true">2025-05-22</span></div>
     </div>
   
     <div class="info-row single">
-      <div><strong>Referred By:</strong> <span id="referred_by"></span></div>
+      <div><strong>Referred By:</strong> <span id="referred_by" contenteditable="true">د. أحمد</span></div>
     </div>
     <div class="info-row single">
-      <div><strong>code:</strong> <span id="code_by"></span></div>
+      <div><strong>code:</strong> <span id="code_by" contenteditable="true">123456</span></div>
     </div>
   
     <hr>
@@ -127,33 +95,33 @@
     <div class="info-column">
       <div class="bold-title">
         <span class="label">CLINICAL DATA:</span>
-        <div>• Clinical Diagnosis: <span id="clinical_diagnosis"></span></div>
+        <div>• Clinical Diagnosis: <span id="clinical_diagnosis" contenteditable="true">مثال على التشخيص السريري</span></div>
       </div>
   
       <div class="bold-title">
         <span class="label">SPECIMEN:</span>
-        <div>• Specimen Information: <span id="specimen_type"></span></div>
+        <div>• Specimen Information: <span id="specimen_type" contenteditable="true">نوع العينة</span></div>
       </div>
   
       <div class="bold-title">
         <span class="label">GROSS PICTURE:</span>
-        <div><span id="gross_picture"></span></div>
+        <div><span id="gross_picture" contenteditable="true">الوصف الظاهري</span></div>
       </div>
   
       <div class="bold-title">
         <span class="label">MICROSCOPIC PICTURE:</span>
-        <div><span id="microscopic_picture"></span></div>
+        <div><span id="microscopic_picture" contenteditable="true">الوصف المجهري</span></div>
       </div>
   
       <div class="bold-title">
         <span class="label">DIAGNOSIS:</span>
-        <div><span id="diagnosis"></span></div>
+        <div><span id="diagnosis" contenteditable="true">التشخيص النهائي</span></div>
       </div>
     </div>
 
     <div class="signature">
       <br><br>
-      <div class="right-signature">Signed by: <span id="doctor_signature">Dr. Hayam Rashed</span></div>
+      <div class="right-signature">Signed by: <span id="doctor_signature" contenteditable="true">Dr. Hayam Rashed</span></div>
     </div>
   </div>
   <h2 class="centered"><br></h2>
