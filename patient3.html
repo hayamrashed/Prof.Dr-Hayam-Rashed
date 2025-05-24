@@ -70,6 +70,10 @@
       z-index: 1000;
     }
 
+    .bold-title {
+      margin-bottom: 10px;
+    }
+
     @media print {
       #toolbar {
         display: none !important;
@@ -97,6 +101,8 @@
     <option value="5">كبير</option>
     <option value="7">ضخم</option>
   </select>
+  <button onclick="moveBoldTitleUp()">⬆️ لأعلى</button>
+  <button onclick="moveBoldTitleDown()">⬇️ لأسفل</button>
 </div>
 
 <div id="patientReport" class="report-container">
@@ -174,6 +180,35 @@
 
 <script src="patient3.js"></script>
 <script src="print3.js"></script>
+
+<!-- كود التحكم في المسافة أسفل عناصر bold-title -->
+<script>
+  function findAncestor(el, className) {
+    while (el && el !== document.body) {
+      if (el.classList && el.classList.contains(className)) return el;
+      el = el.parentNode;
+    }
+    return null;
+  }
+
+  function moveBoldTitleUp() {
+    const selectedEl = window.getSelection().anchorNode;
+    const targetDiv = findAncestor(selectedEl, 'bold-title');
+    if (!targetDiv) return;
+
+    const currentMargin = parseInt(window.getComputedStyle(targetDiv).marginBottom) || 0;
+    targetDiv.style.marginBottom = (currentMargin - 20 >= 0 ? currentMargin - 20 : 0) + 'px';
+  }
+
+  function moveBoldTitleDown() {
+    const selectedEl = window.getSelection().anchorNode;
+    const targetDiv = findAncestor(selectedEl, 'bold-title');
+    if (!targetDiv) return;
+
+    const currentMargin = parseInt(window.getComputedStyle(targetDiv).marginBottom) || 0;
+    targetDiv.style.marginBottom = (currentMargin + 20) + 'px';
+  }
+</script>
 
 </body>
 </html>
