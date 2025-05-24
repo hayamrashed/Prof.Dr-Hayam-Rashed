@@ -10,12 +10,12 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
   <style>
-    /* ... (نفس التنسيقات الأصلية) ... */
     #toolbar button, #toolbar select {
       margin-left: 5px;
       padding: 5px 10px;
       font-size: 14px;
     }
+
     #toolbar {
       background: #eee;
       border: 1px solid #ccc;
@@ -28,11 +28,16 @@
       top: 0;
       z-index: 1000;
     }
-      @media print {
-    #toolbar {
-      display: none !important;
+
+    .bold-title {
+      margin-bottom: 10px;
     }
-  }
+
+    @media print {
+      #toolbar {
+        display: none !important;
+      }
+    }
   </style>
 </head>
 
@@ -55,22 +60,15 @@
     <option value="5">كبير</option>
     <option value="7">ضخم</option>
   </select>
+  <button onclick="moveBoldTitleUp()">⬆️ لأعلى</button>
+  <button onclick="moveBoldTitleDown()">⬇️ لأسفل</button>
 </div>
 
 <div id="patientReport" class="report-container">
   <h2 class="centered"><br></h2>
-  <div class="signature">
-    <br><br>
-    <div class="right-signature"></div>
-  </div>
-  <div class="signature">
-    <br><br>
-    <div class="right-signature"></div>
-  </div>
-  <div class="signature">
-    <br><br>
-    <div class="right-signature"></div>
-  </div>
+  <div class="signature"><br><br><div class="right-signature"></div></div>
+  <div class="signature"><br><br><div class="right-signature"></div></div>
+  <div class="signature"><br><br><div class="right-signature"></div></div>
 
   <div id="patientReportContent">
     <div class="info-row">
@@ -127,19 +125,11 @@
       <div class="right-signature">Signed by: <span id="doctor_signature" contenteditable="true">Dr. Hayam Rashed</span></div>
     </div>
   </div>
+
   <h2 class="centered"><br></h2>
-  <div class="signature">
-    <br><br>
-    <div class="right-signature"></div>
-  </div>
-  <div class="signature">
-    <br><br>
-    <div class="right-signature"></div>
-  </div>
-  <div class="signature">
-    <br><br>
-    <div class="right-signature"></div>
-  </div>
+  <div class="signature"><br><br><div class="right-signature"></div></div>
+  <div class="signature"><br><br><div class="right-signature"></div></div>
+  <div class="signature"><br><br><div class="right-signature"></div></div>
   <h2 class="centered"><br></h2>
 </div>
 
@@ -156,8 +146,37 @@
 
 <div id="photosSection" class="photos-section"></div>
 
-<script src="patient2.js"></script>    <!-- تحميل بيانات المريض -->
-<script src="print2.js"></script>      <!-- كود الطباعة -->
+<script src="patient2.js"></script>
+<script src="print2.js"></script>
+
+<!-- كود التحكم في المسافة أسفل عناصر bold-title -->
+<script>
+  function findAncestor(el, className) {
+    while (el && el !== document.body) {
+      if (el.classList && el.classList.contains(className)) return el;
+      el = el.parentNode;
+    }
+    return null;
+  }
+
+  function moveBoldTitleUp() {
+    const selectedEl = window.getSelection().anchorNode;
+    const targetDiv = findAncestor(selectedEl, 'bold-title');
+    if (!targetDiv) return;
+
+    const currentMargin = parseInt(window.getComputedStyle(targetDiv).marginBottom) || 0;
+    targetDiv.style.marginBottom = (currentMargin - 20 >= 0 ? currentMargin - 20 : 0) + 'px';
+  }
+
+  function moveBoldTitleDown() {
+    const selectedEl = window.getSelection().anchorNode;
+    const targetDiv = findAncestor(selectedEl, 'bold-title');
+    if (!targetDiv) return;
+
+    const currentMargin = parseInt(window.getComputedStyle(targetDiv).marginBottom) || 0;
+    targetDiv.style.marginBottom = (currentMargin + 20) + 'px';
+  }
+</script>
 
 </body>
 </html>
