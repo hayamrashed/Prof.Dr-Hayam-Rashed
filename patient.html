@@ -116,6 +116,10 @@
         display: none !important;
       }
     }
+
+    .bold-title {
+      margin-bottom: 10px; /* Default space between sections */
+    }
   </style>
 </head>
 
@@ -138,13 +142,12 @@
     <option value="5">كبير</option>
     <option value="7">ضخم</option>
   </select>
+  <button onclick="moveBoldTitleUp()">⬆️ لأعلى</button>
+  <button onclick="moveBoldTitleDown()">⬇️ لأسفل</button>
 </div>
 
 <div id="patientReport" class="report-container">
   <h2 class="centered"><br></h2>
-
-  <div class="signature"><br><br><div class="right-signature"></div></div>
-  <div class="signature"><br><br><div class="right-signature"></div></div>
   <div class="signature"><br><br><div class="right-signature"></div></div>
 
   <div class="info-row">
@@ -195,8 +198,6 @@
   <div class="signature"><br><br><div class="right-signature">PROF - DR HAYAM RASHED</div></div>
   <div class="signature"><br><br><div class="right-signature"></div></div>
   <div class="signature"><br><br><div class="right-signature"></div></div>
-  <div class="signature"><br><br><div class="right-signature"></div></div>
-  <div class="signature"><br><br><div class="right-signature"></div></div>
 </div>
 
 <div class="buttons">
@@ -211,6 +212,35 @@
 </div>
 
 <div id="photosSection" class="photos-section"></div>
+
+<!-- JavaScript for margin movement -->
+<script>
+  function findAncestor(el, className) {
+    while (el && el !== document.body) {
+      if (el.classList && el.classList.contains(className)) return el;
+      el = el.parentNode;
+    }
+    return null;
+  }
+
+  function moveBoldTitleUp() {
+    const selectedEl = window.getSelection().anchorNode;
+    const targetDiv = findAncestor(selectedEl, 'bold-title');
+    if (!targetDiv) return;
+
+    const currentMargin = parseInt(window.getComputedStyle(targetDiv).marginBottom) || 0;
+    targetDiv.style.marginBottom = (currentMargin - 20 >= 0 ? currentMargin - 20 : 0) + 'px';
+  }
+
+  function moveBoldTitleDown() {
+    const selectedEl = window.getSelection().anchorNode;
+    const targetDiv = findAncestor(selectedEl, 'bold-title');
+    if (!targetDiv) return;
+
+    const currentMargin = parseInt(window.getComputedStyle(targetDiv).marginBottom) || 0;
+    targetDiv.style.marginBottom = (currentMargin + 20) + 'px';
+  }
+</script>
 
 <script src="patient.js"></script>
 <script src="print.js"></script>
