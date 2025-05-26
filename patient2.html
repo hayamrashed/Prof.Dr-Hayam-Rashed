@@ -54,7 +54,7 @@
     <option value="Courier New">Courier New</option>
     <option value="Times New Roman">Times New Roman</option>
   </select>
-<select onchange="setFontSize(this.value)">
+<select onchange="applyRealFontSize(this.value)">
   <option value="8px">8</option>
   <option value="12px" selected>12</option>
   <option value="15px">15</option>
@@ -171,17 +171,25 @@
     targetDiv.style.marginBottom = (currentMargin + 20) + 'px';
   }
 
-   function setFontSize(size) {
-    document.execCommand('styleWithCSS', true);
-    document.execCommand('fontSize', false, '7'); // مؤقتاً نستخدم أكبر حجم
-    // ثم نغير الحجم الحقيقي عن طريق تحديث الـ <font> الذي تم إنشاؤه
-    let fonts = document.getElementsByTagName("font");
-    for (let i = 0; i < fonts.length; i++) {
-      if (fonts[i].size == "7") {
-        fonts[i].removeAttribute("size");
-        fonts[i].style.fontSize = size;
-      }
-    }
+  function applyRealFontSize(size) {
+    const selection = window.getSelection();
+    if (!selection.rangeCount) return;
+
+    const range = selection.getRangeAt(0);
+    if (range.collapsed) return; // لا يوجد نص محدد
+
+    const span = document.createElement("span");
+    span.style.fontSize = size;
+
+    // يلف النص المحدد داخل span
+    span.appendChild(range.extractContents());
+    range.insertNode(span);
+
+    // ينقل المؤشر بعد النص الجديد
+    range.setStartAfter(span);
+    range.setEndAfter(span);
+    selection.removeAllRanges();
+    selection.addRange(range);
   }
 </script>
 
