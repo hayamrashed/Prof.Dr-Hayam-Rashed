@@ -54,17 +54,19 @@
     <option value="Courier New">Courier New</option>
     <option value="Times New Roman">Times New Roman</option>
   </select>
-  <select onchange="document.execCommand('fontSize', false, this.value)">
-    <option value="1">صغير</option>
-    <option value="3" selected>متوسط</option>
-    <option value="5">كبير</option>
-    <option value="7">ضخم</option>
-  </select>
+<select onchange="setFontSize(this.value)">
+  <option value="8px">8</option>
+  <option value="12px" selected>12</option>
+  <option value="15px">15</option>
+  <option value="20px">20</option>
+  <option value="24px">24</option>
+</select>
   <button onclick="moveBoldTitleUp()">⬆️ لأعلى</button>
   <button onclick="moveBoldTitleDown()">⬇️ لأسفل</button>
 </div>
 
 <div id="patientReport" class="report-container">
+    <div class="signature"><br><br><div class="right-signature"></div></div>
   <div class="signature"><br><br><div class="right-signature"></div></div>
   <div class="signature"><br><br><div class="right-signature"></div></div>
 
@@ -122,7 +124,7 @@
     </div>
   </div>
   <div class="signature"><br><div class="right-signature"></div></div>
-
+<br><br>
 </div>
 
 <div class="buttons">
@@ -167,6 +169,19 @@
 
     const currentMargin = parseInt(window.getComputedStyle(targetDiv).marginBottom) || 0;
     targetDiv.style.marginBottom = (currentMargin + 20) + 'px';
+  }
+
+   function setFontSize(size) {
+    document.execCommand('styleWithCSS', true);
+    document.execCommand('fontSize', false, '7'); // مؤقتاً نستخدم أكبر حجم
+    // ثم نغير الحجم الحقيقي عن طريق تحديث الـ <font> الذي تم إنشاؤه
+    let fonts = document.getElementsByTagName("font");
+    for (let i = 0; i < fonts.length; i++) {
+      if (fonts[i].size == "7") {
+        fonts[i].removeAttribute("size");
+        fonts[i].style.fontSize = size;
+      }
+    }
   }
 </script>
 
