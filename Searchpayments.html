@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>بحث وتعديل التقارير</title>
+  <style>
+ body {
+  font-family: 'Cairo', Arial, sans-serif;
+  direction: rtl;
+  background: linear-gradient(to top, #f1f1f1, #ffffff);
+  padding: 20px;
+  line-height: 1.6;
+}
+
+.search-container, .result-container {
+  max-width: 1000px;
+  margin: auto;
+  background: #fff;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+  margin-bottom: 30px;
+  transition: transform 0.2s ease;
+}
+
+.search-container:hover, .result-container:hover {
+  transform: scale(1.01);
+}
+
+input, select {
+  width: 100%;
+  padding: 10px;
+  margin-top: 6px;
+  margin-bottom: 12px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-sizing: border-box;
+  transition: border 0.2s;
+}
+
+input:focus, select:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+button {
+  padding: 10px 18px;
+  margin: 5px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+  font-weight: bold;
+}
+
+button:hover {
+  background-color: #0056b3;
+  transform: translateY(-1px);
+}
+
+table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0 12px;
+  margin-top: 20px;
+}
+
+th {
+  background-color: #007bff;
+  color: white;
+  padding: 12px;
+  border-radius: 8px 8px 0 0;
+  text-align: center;
+  letter-spacing: 1px;
+  font-size: 16px;
+}
+
+td {
+  background-color: #fefefe;
+  padding: 12px;
+  text-align: center;
+  border-radius: 8px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+}
+
+td input {
+  text-align: center;
+  padding: 6px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+td button {
+  margin: 3px;
+}
+
+.hidden {
+  display: none;
+}
+
+   .site-header {
+  background-color: #04243f;
+  color: white;
+  padding: 15px 0;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.container {
+  width: 90%;
+  margin: auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-direction: row-reverse; /* <<< هنا التعديل */
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+}
+
+.logo-img {
+  width: 50px;
+  height: 50px;
+  object-fit: contain;
+  margin-left: 10px; /* <<< بدل margin-right لأن الشعار على اليمين */
+}
+
+.logo h1 {
+  margin: 0;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.nav-links {
+  display: flex;
+}
+
+.nav-links a {
+  color: white;
+  text-decoration: none;
+  margin-right: 20px; /* <<< بدل margin-left */
+  font-size: 16px;
+  transition: color 0.3s;
+}
+
+.nav-links a:hover {
+  color: #4CAF50;
+}
+
+.menu-icon {
+  display: none;
+  font-size: 26px;
+  cursor: pointer;
+}
+
+/* قسم التواصل */
+.contact {
+  background-color: #04243f;
+  color: white;
+  padding: 60px 20px;
+  text-align: center;
+}
+.contact h2 {
+  font-size: 30px;
+  margin-bottom: 20px;
+}
+.contact p {
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+
+  .footer-content span {
+    margin-right: 15px; /* المسافة بين النص والأيقونات */
+  }
+  
+  .social-icons a {
+    margin: 0 10px;
+    color: white;
+    font-size: 20px;
+    text-decoration: none;
+  }
+  
+  .social-icons a:hover {
+    color: #ff9800; /* تغيير اللون عند التمرير */
+  }
+  footer {
+    background: #031a2d;
+    color: white;
+    text-align: center;
+    padding: 15px 10px;
+    font-size: 14px;
+  }
+  
+  .footer-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .footer-content span {
+    margin-right: 15px; /* المسافة بين النص والأيقونات */
+  }
+  
+  .social-icons a {
+    margin: 0 10px;
+    color: white;
+    font-size: 20px;
+    text-decoration: none;
+  }
+  
+  .social-icons a:hover {
+    color: #ff9800; /* تغيير اللون عند التمرير */
+  }
+
+</style>
+
+</head>
+<header class="site-header">
+  <div class="container">
+
+    <nav class="nav-links" id="navLinks">
+      <a href="index.html">Home</a>
+      <a href="Payments.html">Payments</a>
+      <a href="Searchpayments.html">Search payments</a>
+      <a href="search.html">search Report</a>
+      <a href="Cytology Report.html">Cytology Report</a>
+      <a href="Pathology Report.html">Pathology Report</a>
+      <a href="IHC Report.html">IHC Report</a>
+      
+    </nav>
+ <div class="logo">
+      <h1>Prof.Dr Hayam Rashed</h1>
+      <img src="logo.png" alt="Logo" class="logo-img">
+    </div>
+    <div class="menu-icon" onclick="toggleMenu()">☰</div>
+  </div>
+
+  <script>
+    function toggleMenu() {
+      var nav = document.getElementById('navLinks');
+      nav.style.display = nav.style.display === "flex" ? "none" : "flex";
+    }
+  </script>
+</header>
+<body>
+  <div class="search-container">
+    <h2>بحث بالمدفوعات</h2>
+    <input type="text" id="searchInput" placeholder="اكتب الاسم أو الكود..." />
+    <button onclick="searchReports()">بحث</button>
+    <button onclick="history.back()" style="padding: 10px 20px; background-color: #007bff; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 16px;">
+    رجوع للخلف
+  </button>  
+  </div>
+
+  <div class="result-container" id="resultsContainer"></div>
+
+  <script>
+      const SUPABASE_URL = 'https://vqtqhimbedayckyttxff.supabase.co';
+      const SUPABASE_API_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZxdHFoaW1iZWRheWNreXR0eGZmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDkxMDEwMDAsImV4cCI6MjA2NDY3NzAwMH0.2diQwsycIJP896Z5GI8pb6zQzcJYDxdxK_IM6Nr_1VU';
+
+
+    async function searchReports() {
+      const query = document.getElementById("searchInput").value.trim();
+      if (!query) return alert("يرجى إدخال اسم أو كود للبحث");
+
+      const url = `${SUPABASE_URL}/rest/v1/reports?select=*&or=(code_number.ilike.${query}*,name.ilike.${query}*)&apikey=${SUPABASE_API_KEY}`;
+      
+      const response = await fetch(url, {
+        headers: {
+          'apikey': SUPABASE_API_KEY,
+          'Authorization': `Bearer ${SUPABASE_API_KEY}`,
+        }
+      });
+
+      const data = await response.json();
+      displayResults(data);
+    }
+
+    function displayResults(records) {
+      const container = document.getElementById("resultsContainer");
+      if (records.length === 0) {
+        container.innerHTML = "<p>لا توجد نتائج.</p>";
+        return;
+      }
+
+      let html = `<table><thead><tr>
+        <th>الاسم</th>
+        <th>الكود</th>
+        <th>رقم الهاتف</th>
+        <th>رقم البطاقة</th>
+        <th>نوع التقرير</th>
+        <th>المطلوب</th>
+        <th>المدفوع</th>
+        <th>الباقي</th>
+        <th>الإجراء</th>
+      </tr></thead><tbody>`;
+
+      records.forEach(record => {
+        html += `
+          <tr data-id="${record.id}">
+            <td><input value="${record.name}" disabled /></td>
+            <td><input value="${record.code_number}" disabled /></td>
+            <td><input value="${record.phone}" disabled /></td>
+            <td><input value="${record.id_number}" disabled /></td>
+            <td><input value="${record.report_type}" disabled /></td>
+            <td><input type="number" value="${record.total}" disabled /></td>
+            <td><input type="number" value="${record.paid}" disabled /></td>
+            <td><input type="number" value="${record.remaining}" disabled /></td>
+            <td>
+              <button class="edit-btn" onclick="editRow(this)">تعديل</button>
+              <button class="save-btn hidden" onclick="saveRow(this)">حفظ</button>
+            </td>
+          </tr>
+        `;
+      });
+
+      html += "</tbody></table>";
+      container.innerHTML = html;
+    }
+
+    function editRow(button) {
+      const row = button.closest("tr");
+      row.querySelectorAll("input").forEach(input => input.disabled = false);
+      row.querySelector(".edit-btn").classList.add("hidden");
+      row.querySelector(".save-btn").classList.remove("hidden");
+    }
+
+    async function saveRow(button) {
+      const row = button.closest("tr");
+      const id = row.dataset.id;
+
+      const inputs = row.querySelectorAll("input");
+      const updatedData = {
+        name: inputs[0].value,
+        code_number: inputs[1].value,
+        phone: inputs[2].value,
+        id_number: inputs[3].value,
+        report_type: inputs[4].value,
+        total: parseFloat(inputs[5].value),
+        paid: parseFloat(inputs[6].value),
+        remaining: parseFloat(inputs[7].value),
+      };
+
+      const response = await fetch(`${SUPABASE_URL}/rest/v1/reports?id=eq.${id}`, {
+        method: 'PATCH',
+        headers: {
+          'apikey': SUPABASE_API_KEY,
+          'Authorization': `Bearer ${SUPABASE_API_KEY}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(updatedData)
+      });
+
+      if (response.ok) {
+        alert("✅ تم حفظ التعديلات بنجاح");
+        row.querySelectorAll("input").forEach(input => input.disabled = true);
+        row.querySelector(".edit-btn").classList.remove("hidden");
+        row.querySelector(".save-btn").classList.add("hidden");
+      } else {
+        alert("❌ فشل في حفظ التعديلات");
+        console.error(await response.text());
+      }
+    }
+  </script>
+</body>
+  <footer>
+    <div class="footer-content">
+
+      <div class="social-icons">
+        <a href="https://www.facebook.com/mohamed.alsayed.219557/?locale=ar_AR" target="_blank"><i class="fab fa-facebook"></i></a>
+        <a href="tel:+01004335462"><i class="fas fa-phone-alt"></i></a>
+        <a href="https://wa.me/01004335462" target="_blank"><i class="fab fa-whatsapp"></i></a> <!-- رابط WhatsApp -->
+      </div>
+      <span>Copyright © 2025 – Prof.Dr Hayam Rashed || Developed by Mohamed Elsayed</span>
+    </div>
+  </footer>
+  
+  <!-- رابط لأيقونات FontAwesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  
+</html>

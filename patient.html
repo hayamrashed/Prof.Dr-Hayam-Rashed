@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <title>Patient Report</title>
+  <link rel="stylesheet" href="Printt.css">
+  <link rel="stylesheet" href="print.css" media="print">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/qrious@4.0.2/dist/qrious.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Amiri&family=Cairo&family=Changa&family=Noto+Kufi+Arabic&display=swap" rel="stylesheet">
+
+  <style>
+    .site-header {
+      background-color: #04243f;
+      color: white;
+      padding: 15px 0;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .container {
+      width: 90%;
+      margin: auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: relative;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+    }
+
+    .logo-img {
+      width: 50px;
+      height: 50px;
+      object-fit: contain;
+      margin-right: 10px;
+    }
+
+    .logo h1 {
+      margin: 0;
+      font-size: 24px;
+      font-weight: bold;
+    }
+
+    .nav-links {
+      display: flex;
+    }
+
+    .nav-links a {
+      color: white;
+      text-decoration: none;
+      margin-left: 20px;
+      font-size: 16px;
+      transition: color 0.3s;
+    }
+
+    .nav-links a:hover {
+      color: #4CAF50;
+    }
+
+    .menu-icon {
+      display: none;
+      font-size: 26px;
+      cursor: pointer;
+    }
+
+    @media (max-width: 768px) {
+      .nav-links {
+        display: none;
+        flex-direction: column;
+        background-color: #04243f;
+        position: absolute;
+        top: 60px;
+        right: 0;
+        width: 200px;
+        border-radius: 0 0 10px 10px;
+        overflow: hidden;
+      }
+
+      .nav-links a {
+        padding: 10px;
+        margin: 0;
+        border-bottom: 1px solid #4CAF50;
+      }
+
+      .menu-icon {
+        display: block;
+      }
+    }
+
+    #toolbar button, #toolbar select {
+      margin-left: 5px;
+      padding: 5px 10px;
+      font-size: 14px;
+    }
+
+    #toolbar {
+      background: #eee;
+      border: 1px solid #ccc;
+      padding: 5px;
+      margin: 10px auto;
+      width: 90%;
+      text-align: center;
+      border-radius: 5px;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    @media print {
+      #toolbar {
+        display: none !important;
+      }
+    }
+
+    .bold-title {
+      margin-bottom: 10px; /* Default space between sections */
+    }
+  </style>
+</head>
+
+<body>
+
+<!-- شريط أدوات التنسيق -->
+<div id="toolbar">
+  <button type="button" onclick="document.execCommand('bold', false, null)">غــامق</button>
+  <button type="button" onclick="document.execCommand('underline', false, null)">تسطير</button>
+  <button type="button" onclick="document.execCommand('italic', false, null)">مائل</button>
+  <button type="button" onclick="document.execCommand('justifyFull', false, null)">ضبط النص</button>
+  <select onchange="document.execCommand('fontName', false, this.value)">
+  <!-- خطوط إنجليزية شائعة -->
+  <option value="Arial">Arial</option>
+  <option value="Tahoma">Tahoma</option>
+  <option value="Verdana">Verdana</option>
+  <option value="Times New Roman">Times New Roman</option>
+  <option value="Courier New">Courier New</option>
+  <option value="Georgia">Georgia</option>
+  <option value="Comic Sans MS">Comic Sans MS</option>
+  <option value="Lucida Console">Lucida Console</option>
+  <option value="Impact">Impact</option>
+
+  <!-- خطوط عربية من Google Fonts -->
+  <option value="Cairo">Cairo (عربي)</option>
+  <option value="Amiri">Amiri (عربي)</option>
+  <option value="Changa">Changa (عربي)</option>
+  <option value="Noto Kufi Arabic">Noto Kufi Arabic (عربي)</option>
+</select>
+
+
+<select onchange="applyRealFontSize(this.value)">
+  <option value="8px">8</option>
+  <option value="10px">10</option>
+  <option value="12px">12</option>
+  <option value="14px">14</option>
+  <option value="16px">16</option>
+  <option value="18px">18</option>
+  <option value="20px">20</option>
+  <option value="24px">24</option>
+  <option value="28px">28</option>
+  <option value="32px">32</option>
+  <option value="36px">36</option>
+  <option value="40px">40</option>
+  <option value="45px">45</option>
+  <option value="50px">50</option>
+</select>
+  <button onclick="moveBoldTitleUp()">⬆️ لأعلى</button>
+  <button onclick="moveBoldTitleDown()">⬇️ لأسفل</button>
+</div>
+
+<div id="patientReport" class="report-container">
+  <h2 class="centered"><br></h2>
+  <div class="signature"><br><br><div class="right-signature"></div></div>
+
+  <div class="info-row">
+    <div><strong>Patient Name:</strong> <span id="patient_name" contenteditable="true">اسم المريض</span></div>
+    <div><strong>Age:</strong> <span id="age" contenteditable="true">30</span></div>
+    <div><strong>Sex:</strong> <span id="sex" contenteditable="true">ذكر</span></div>
+  </div>
+
+  <div class="info-row">
+    <div><strong>Date Report Issued:</strong> <span id="date_report_issued" contenteditable="true">2025-05-22</span></div>
+    <div><strong>Specimen Received Date:</strong> <span id="specimen_received_date" contenteditable="true">2025-05-20</span></div>
+  </div>
+
+  <div class="info-row single">
+    <div><strong>Referred By:</strong> <span id="referred_by" contenteditable="true">د. أحمد</span></div>
+  </div>
+
+  <div class="info-row single">
+    <div><strong>Patient Code:</strong> <span id="code" contenteditable="true">123456</span></div>
+  </div>
+
+  <hr>
+
+  <h3 class="centered">IMMUNOHISTOCHEMISTRY REPORT</h3>
+
+  <div class="info-column">
+    <div class="bold-title">
+      <span class="label">Clinical Data:</span> <span id="clinical_data" contenteditable="true">بيانات سريرية</span>
+    </div>
+    
+    <div class="bold-title">
+      <span class="label">Specimen:</span> <span id="specimen" contenteditable="true">نوع العينة</span>
+    </div>
+    
+    <div class="bold-title">
+      <span class="label">Procedure:</span> <span id="procedure" contenteditable="true">إجراء مخبري</span>
+    </div>
+    
+    <div class="bold-title">
+      <span class="label">Results:</span> <span id="results" contenteditable="true">نتائج التحليل</span>
+    </div>
+    
+    <div class="bold-title">
+      <span class="label">Diagnosis:</span> <span id="diagnosis" contenteditable="true">تشخيص نهائي</span>
+    </div>
+  </div>
+
+  <div class="signature"><br><br><div class="right-signature">PROF - DR HAYAM RASHED</div></div>
+  <div class="signature"><br><br><div class="right-signature"></div></div>
+  <div class="signature"><br><br><div class="right-signature"></div></div>
+</div>
+
+<div class="buttons">
+  <button onclick="printReport()">Print PDF</button>
+  <button onclick="saveAsImage()">Download as Image</button>
+  <button onclick="window.location.href='photo.html'">Load Visual Data Photos</button>
+  <button onclick="generateAndDownloadQR()">QR Code</button>
+  <button onclick="window.location.href='edit_patient1.html'">edit</button>
+  <button onclick="window.location.href='Searchpayments.html'">Search payments</button>
+  <button onclick="history.back()" style="padding: 10px 20px; background-color: #007bff; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 16px;">
+    رجوع للخلف
+  </button>
+</div>
+
+<div id="photosSection" class="photos-section"></div>
+
+<!-- JavaScript for margin movement -->
+<script>
+  function findAncestor(el, className) {
+    while (el && el !== document.body) {
+      if (el.classList && el.classList.contains(className)) return el;
+      el = el.parentNode;
+    }
+    return null;
+  }
+
+  function moveBoldTitleUp() {
+    const selectedEl = window.getSelection().anchorNode;
+    const targetDiv = findAncestor(selectedEl, 'bold-title');
+    if (!targetDiv) return;
+
+    const currentMargin = parseInt(window.getComputedStyle(targetDiv).marginBottom) || 0;
+    targetDiv.style.marginBottom = (currentMargin - 20 >= 0 ? currentMargin - 20 : 0) + 'px';
+  }
+
+  function moveBoldTitleDown() {
+    const selectedEl = window.getSelection().anchorNode;
+    const targetDiv = findAncestor(selectedEl, 'bold-title');
+    if (!targetDiv) return;
+
+    const currentMargin = parseInt(window.getComputedStyle(targetDiv).marginBottom) || 0;
+    targetDiv.style.marginBottom = (currentMargin + 20) + 'px';
+  }
+</script>
+
+<script src="patient.js"></script>
+<script src="print.js"></script>
+
+</body>
+</html>
