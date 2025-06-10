@@ -120,6 +120,11 @@
       </div>
 
       <div class="input-group">
+        <label>gross_picture</label>
+        <textarea id="gross_picture" rows="2"></textarea>
+      </div>
+
+      <div class="input-group">
         <label>Microscopic Picture</label>
         <textarea id="microscopic_picture" rows="3"></textarea>
       </div>
@@ -169,6 +174,7 @@
       document.getElementById("referred_by").value = patient.referred_by || '';
       document.getElementById("clinical_data").value = patient.clinical_data || '';
       document.getElementById("specimen_information").value = patient.specimen_information || '';
+      document.getElementById("gross_picture").value = patient.gross_picture || '';
       document.getElementById("microscopic_picture").value = patient.microscopic_picture || '';
       document.getElementById("diagnosis").value = patient.diagnosis || '';
       document.getElementById("doctor_signature").value = patient.doctor_signature || '';
@@ -185,6 +191,7 @@
         referred_by: document.getElementById("referred_by").value,
         clinical_data: document.getElementById("clinical_data").value,
         specimen_information: document.getElementById("specimen_information").value,
+        gross_picture: document.getElementById("gross_picture").value,
         microscopic_picture: document.getElementById("microscopic_picture").value,
         diagnosis: document.getElementById("diagnosis").value,
         doctor_signature: document.getElementById("doctor_signature").value
