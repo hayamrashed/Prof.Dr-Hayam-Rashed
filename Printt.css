@@ -168,4 +168,24 @@
 .header, footer, nav, .menu-icon {
   display: none !important;
 }
-  
+   /* ✅ تنسيق رأس التقرير بشكل شبكي */
+  .report-header-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* عمودين متساويين */
+    grid-row-gap: 10px;
+    grid-column-gap: 30px;
+    margin-bottom: 20px;
+  }
+
+  .report-header-grid .full {
+    grid-column: 1 / span 2;
+  }
+
+  .report-header-grid div {
+    display: flex;
+    gap: 5px;
+  }
+
+  .report-header-grid strong {
+    min-width: 140px;
+  }
