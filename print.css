@@ -1,54 +1,120 @@
-/* تنسيقات خاصة بالطباعة */
 @media print {
-    body {
-      font-family: Arial, sans-serif;
-      color: #04243f;
-    }
-  
-    .buttons, #photosSection {
-      display: none;
-    }
-  
-    .report-container {
-      width: 100%;
-      margin: 0;
-      padding: 10px;
-    }
-  
-    /* عناصر العلوية تبقى على صفوف أفقية */
-    .info-row {
-      display: flex;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      margin-bottom: 10px;
-    }
-  
-    .info-row.single {
-      display: block;
-    }
-  
-    .info-row div, .info-column div {
-      margin-bottom: 5px;
-    }
-  
-    .info-column {
-      display: block;
-      margin-bottom: 10px;
-    }
-  
-    hr {
-      margin: 20px 0;
-      border: 0;
-      border-top: 1px solid #ccc;
-    }
-  
-    .signature {
-      text-align: right;
-      font-size: 14px;
-      margin-top: 20px;
-      font-weight: bold;
-    }
+  body {
+    font-family: Arial, sans-serif;
+    color: #04243f;
   }
-  header, footer, nav, .menu-icon {
+
+  .buttons, #photosSection {
+    display: none;
+  }
+
+  .report-container {
+    width: 100%;
+    margin: 0;
+    padding: 10px;
+  }
+
+  .info-row,
+  .info-column {
+    display: block;
+    margin-bottom: 10px;
+  }
+
+  .info-row div,
+  .info-column div {
+    margin-bottom: 5px;
+  }
+
+  /* ✅ تعديل توزيع حقل الاسم والعمر والنوع */
+  .info-row:first-of-type {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: nowrap;
+    align-items: center;
+  }
+
+  .info-row:first-of-type > div:nth-child(1) {
+    flex: 2.2; /* اسم المريض */
+    white-space: nowrap; /* يمنع الانقسام */
+  }
+
+  .info-row:first-of-type > div:nth-child(2) {
+    flex: 0.8; /* العمر */
+    margin-left: 10px;
+  }
+
+  .info-row:first-of-type > div:nth-child(3) {
+    flex: 1; /* النوع */
+  }
+
+  hr {
+    margin: 20px 0;
+    border: 0;
+    border-top: 1px solid #ccc;
+  }
+
+  .signature {
+    text-align: right;
+    font-size: 14px;
+    margin-top: 20px;
+    font-weight: bold;
+  }
+
+  .header,
+  footer,
+  nav,
+  .menu-icon {
     display: none !important;
   }
+}
+@media print {
+  body {
+    font-family: Arial, sans-serif;
+    color: #04243f;
+  }
+
+  .buttons, #photosSection {
+    display: none;
+  }
+
+  .report-container {
+    width: 100%;
+    margin: 0;
+    padding: 10px;
+  }
+
+  hr {
+    margin: 20px 0;
+    border: 0;
+    border-top: 1px solid #ccc;
+  }
+
+  .signature {
+    text-align: right;
+    font-size: 14px;
+    margin-top: 20px;
+    font-weight: bold;
+  }
+
+  /* ✅ تنسيق رأس التقرير بشكل شبكي */
+  .report-header-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* عمودين متساويين */
+    grid-row-gap: 10px;
+    grid-column-gap: 30px;
+    margin-bottom: 20px;
+  }
+
+  .report-header-grid .full {
+    grid-column: 1 / span 2;
+  }
+
+  .report-header-grid div {
+    display: flex;
+    gap: 5px;
+  }
+
+  .report-header-grid strong {
+    min-width: 140px;
+  }
+}
