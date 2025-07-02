@@ -13,7 +13,7 @@ async function searchPatients() {
     patientsList.innerHTML = "";
     return;
   }
-
+ 
   const { data, error } = await fetchPatientsByName(searchTerm);
 
   if (error) {
@@ -24,13 +24,23 @@ async function searchPatients() {
   renderPatients(data);
 }
 
+// ✅ دالة البحث مع دعم عدم حساسية الحروف + حل مشكلة pagination
 async function fetchPatientsByName(name) {
-  const response = await fetch(`${supabaseUrl}/rest/v1/${tableName}?patient_name=ilike.${name}%25`, {
+  const lowercase = name.toLowerCase();
+  const capitalized = name.charAt(0).toUpperCase() + name.slice(1).toLowerCase();
+
+  // ✅ يبحث في أي جزء من الاسم (ولاء، عبد، علي، ..الخ)
+  const query = `or=(patient_name.ilike.*${lowercase}*,patient_name.ilike.*${capitalized}*)`;
+
+  const response = await fetch(`${supabaseUrl}/rest/v1/${tableName}?${query}`, {
     headers: {
       apikey: supabaseKey,
       Authorization: `Bearer ${supabaseKey}`,
+      Range: "0-999",              // ✅ يجلب حتى 1000 نتيجة
+      "Range-Unit": "items"
     },
   });
+
   const data = await response.json();
   return { data };
 }
@@ -96,14 +106,12 @@ async function deletePatient(code, photoPath) {
   }
 
   try {
-    // أولاً نحذف الصور
     if (photoPath) {
       await deleteFromStorage(photoPath);
     }
-    // حذف أي صور إضافية لو فيه مجلد فيه صور إضافية
+
     await deleteFolder(code);
 
-    // بعدين نحذف السجل من الجدول
     const { error } = await fetch(`${supabaseUrl}/rest/v1/${tableName}?code=eq.${code}`, {
       method: "DELETE",
       headers: {
@@ -117,7 +125,7 @@ async function deletePatient(code, photoPath) {
       alert('❌ حدث خطأ أثناء حذف المريض.');
     } else {
       alert('✅ تم حذف المريض بنجاح.');
-      searchPatients(); // تحديث القائمة
+      searchPatients();
     }
 
   } catch (error) {
