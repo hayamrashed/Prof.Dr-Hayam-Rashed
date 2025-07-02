@@ -24,17 +24,28 @@ async function searchPatients() {
   renderPatients(data);
 }
 
+// ✅ البحث يبدأ بنفس الحرف فقط (غير حساس لحالة الحروف)
 async function fetchPatientsByName(name) {
-  const response = await fetch(`${supabaseUrl}/rest/v1/${tableName}?patient_name=ilike.${name}%25`, {
+  const lowercase = name.toLowerCase();
+  const capitalized = name.charAt(0).toUpperCase() + name.slice(1).toLowerCase();
+
+  const query = `or=(patient_name.ilike.${lowercase}*,patient_name.ilike.${capitalized}*)`;
+
+  const response = await fetch(`${supabaseUrl}/rest/v1/${tableName}?${query}`, {
     headers: {
       apikey: supabaseKey,
       Authorization: `Bearer ${supabaseKey}`,
+      Range: "0-999",
+      "Range-Unit": "items"
     },
   });
+
   const data = await response.json();
   return { data };
 }
 
+
+ 
 function renderPatients(patients) {
   patientsList.innerHTML = "";
 
@@ -60,8 +71,7 @@ function renderPatients(patients) {
       </div>
       <div class="patient-actions">
         <button onclick="openPatient('${patient.code}')">عرض الملف</button>
-        <button onclick="deletePatient('${patient.code}', '${patient.photo_url}')"
-          style="background-color: red; margin-right: 5px;">حذف</button>
+        <button onclick="deletePatient('${patient.code}', '${patient.photo_url}')" style="background-color: red; margin-right: 5px;">حذف</button>
       </div>
     `;
 
@@ -79,6 +89,7 @@ async function getSignedUrl(path) {
     },
     body: JSON.stringify({ expiresIn: 3600 }),
   });
+
   if (response.ok) {
     return { signedUrl: `${supabaseUrl}/storage/v1/object/public/${bucketName}/${path}` };
   }
@@ -89,21 +100,18 @@ function openPatient(code) {
   window.location.href = `patient.html?code=${code}`;
 }
 
-// ✅ دالة لحذف المريض من قاعدة البيانات والصور
 async function deletePatient(code, photoPath) {
   if (!confirm("هل أنت متأكد أنك تريد حذف هذا المريض؟")) {
     return;
   }
 
   try {
-    // أولاً نحذف الصور
     if (photoPath) {
       await deleteFromStorage(photoPath);
     }
-    // حذف أي صور إضافية لو فيه مجلد فيه صور إضافية
+
     await deleteFolder(code);
 
-    // بعدين نحذف السجل من الجدول
     const { error } = await fetch(`${supabaseUrl}/rest/v1/${tableName}?code=eq.${code}`, {
       method: "DELETE",
       headers: {
@@ -117,7 +125,7 @@ async function deletePatient(code, photoPath) {
       alert('❌ حدث خطأ أثناء حذف المريض.');
     } else {
       alert('✅ تم حذف المريض بنجاح.');
-      searchPatients(); // تحديث القائمة
+      searchPatients();
     }
 
   } catch (error) {
@@ -126,7 +134,6 @@ async function deletePatient(code, photoPath) {
   }
 }
 
-// ✅ حذف صورة أو ملف من التخزين
 async function deleteFromStorage(filePath) {
   const response = await fetch(`${supabaseUrl}/storage/v1/object/${bucketName}/${filePath}`, {
     method: "DELETE",
@@ -138,7 +145,6 @@ async function deleteFromStorage(filePath) {
   return response.ok;
 }
 
-// ✅ حذف مجلد كامل (جميع الصور الإضافية)
 async function deleteFolder(code) {
   const response = await fetch(`${supabaseUrl}/storage/v1/object/list/${bucketName}?prefix=${code}/`, {
     headers: {
