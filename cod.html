@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>عرض قائمة مرضى الكيمياء النسيجية المناعية</title>
+  <style>
+    body {
+      font-family: 'Cairo', sans-serif;
+      background: #f0f2f5;
+      margin: 0;
+      padding: 20px;
+    }
+    .search-container {
+  margin: 40px auto 20px auto; /* هامش علوي 40px والمسافة السفلية 20px */
+  text-align: center;
+}
+
+    input[type="text"] {
+      padding: 10px;
+      width: 300px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 16px;
+    }
+    .patients-list {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      margin-top: 20px;
+      max-width: 600px;
+      margin: auto;
+    }
+    .patient-card {
+      background: #fff;
+      border-radius: 8px;
+      padding: 15px;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    .patient-card img {
+  width: 80px;
+  height: 80px;
+  border-radius: 8px; /* مربع مع زوايا خفيفة - ممكن تخليها 0 لو تريده مربع تماماً */
+  object-fit: cover;
+  transition: transform 0.3s ease; /* إضافة انتقال سلس */
+  cursor: pointer; /* توحي للمستخدم بأنه قابل للنقر */
+}
+
+.patient-card img:active {
+  transform: scale(5); /* عند الضغط يكبر 1.2 مرة */
+}
+    .patient-info {
+      flex-grow: 1;
+    }
+    .patient-info h3 {
+      margin: 0;
+      font-size: 18px;
+    }
+    .patient-actions button {
+      padding: 8px 12px;
+      background: #007bff;
+      border: none;
+      color: white;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .site-header {
+  background-color: #04243f;
+  color: white;
+  padding: 15px 0;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.container {
+  width: 90%;
+  margin: auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+}
+
+.logo-img {
+  width: 50px; /* حجم اللوجو */
+  height: 50px;
+  object-fit: contain;
+  margin-right: 10px; /* مسافة بين الصورة والنص */
+}
+
+.logo h1 {
+  margin: 0;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+
+.nav-links {
+  display: flex;
+}
+
+.nav-links a {
+  color: white;
+  text-decoration: none;
+  margin-left: 20px;
+  font-size: 16px;
+  transition: color 0.3s;
+}
+
+.nav-links a:hover {
+  color: #4CAF50;
+}
+
+/* أيقونة المينو */
+.menu-icon {
+  display: none;
+  font-size: 26px;
+  cursor: pointer;
+}
+
+/* موبايل */
+@media (max-width: 768px) {
+  .nav-links {
+    display: none;
+    flex-direction: column;
+    background-color: #04243f;
+    position: absolute;
+    top: 60px;
+    right: 0;
+    width: 200px;
+    border-radius: 0 0 10px 10px;
+    overflow: hidden;
+  }
+
+  .nav-links a {
+    padding: 10px;
+    margin: 0;
+    border-bottom: 1px solid #4CAF50;
+  }
+
+  .menu-icon {
+    display: block;
+  }
+}
+
+/* تواصل معنا */
+.contact {
+      background-color: #04243f;
+      color: white;
+      padding: 60px 20px 60px 20px;
+      text-align: center;
+      margin-top: 200px;
+    }
+    .contact h2 {
+      font-size: 30px;
+      margin-bottom: 20px;
+    }
+    .contact p {
+      font-size: 16px;
+      margin-bottom: 10px;
+    }
+
+    footer {
+    background: #031a2d;
+    color: white;
+    text-align: center;
+    padding: 15px 10px;
+    font-size: 14px;
+  }
+  
+  .footer-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .footer-content span {
+    margin-right: 15px; /* المسافة بين النص والأيقونات */
+  }
+  
+  .social-icons a {
+    margin: 0 10px;
+    color: white;
+    font-size: 20px;
+    text-decoration: none;
+  }
+  
+  .social-icons a:hover {
+    color: #ff9800; /* تغيير اللون عند التمرير */
+  }
+
+  </style>
+</head>
+<header class="site-header">
+  <div class="container">
+    <div class="logo">
+      <img src="logo.png" alt="Logo" class="logo-img">
+      <h1>Prof.Dr Hayam Rashed</h1>
+
+    </div>
+
+    <nav class="nav-links" id="navLinks">
+      <a href="index.html">Home</a>
+      <a href="search.html">search&Reports</a>
+      <a href="IHC Report.html">IHC Report</a>
+      <a href="Pathology Report.html">Pathology Report</a>
+      <a href="Cytology Report.html">Cytology Report</a>
+    </nav>
+
+    <div class="menu-icon" onclick="toggleMenu()">☰</div>
+  </div>
+
+  <script>
+    function toggleMenu() {
+      var nav = document.getElementById('navLinks');
+      if (nav.style.display === "flex") {
+        nav.style.display = "none";
+      } else {
+        nav.style.display = "flex";
+      }
+    }
+  </script>
+</header>
+<body>
+ 
+  <h2>بحث برقم الكود</h2>
+  <input type="text" id="searchInput" placeholder="ادخل رقم الكود" oninput="searchPatients()">
+  <div id="patientsList"></div>
+
+  <script>
+
+    const supabaseUrl = "https://bnmgxpkqjhhhccaroibc.supabase.co";
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJubWd4cGtxamhoaGNjYXJvaWJjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDU2ODM1ODksImV4cCI6MjA2MTI1OTU4OX0.tnIIQZWYr5NuZfjTWAdMgPYde6wTIFq08secQnqAnRs';
+const tableName = "immunohistochemistry_report";
+const bucketName = "photo";
+
+const searchInput = document.getElementById("searchInput");
+const patientsList = document.getElementById("patientsList");
+
+async function searchPatients() {
+  const code = searchInput.value.trim();
+
+  if (code.length === 0) {
+    patientsList.innerHTML = "";
+    return;
+  }
+
+  const { data, error } = await fetchPatientByCode(code);
+
+  if (error) {
+    console.error(error);
+    return;
+  }
+
+  renderPatients(data);
+}
+
+async function fetchPatientByCode(code) {
+  const response = await fetch(`${supabaseUrl}/rest/v1/${tableName}?code=eq.${code}`, {
+    headers: {
+      apikey: supabaseKey,
+      Authorization: `Bearer ${supabaseKey}`,
+      Range: "0-99",
+      "Range-Unit": "items"
+    },
+  });
+
+  const data = await response.json();
+  return { data };
+}
+
+function renderPatients(patients) {
+  patientsList.innerHTML = "";
+
+  if (patients.length === 0) {
+    patientsList.innerHTML = "<p>لا توجد نتائج.</p>";
+    return;
+  }
+
+  patients.forEach(async (patient) => {
+    const card = document.createElement("div");
+    card.className = "patient-card";
+
+    let photoUrl = "default-avatar.png";
+    if (patient.photo_url) {
+      const { signedUrl } = await getSignedUrl(patient.photo_url);
+      photoUrl = signedUrl || "default-avatar.png";
+    }
+
+    card.innerHTML = `
+      <img src="${photoUrl}" alt="صورة المريض">
+      <div class="patient-info">
+        <h3>الكود: ${patient.code}</h3>
+        <p>الاسم: ${patient.patient_name || "غير متوفر"}</p>
+      </div>
+      <div class="patient-actions">
+        <button onclick="openPatient('${patient.code}')">عرض الملف</button>
+        <button onclick="deletePatient('${patient.code}', '${patient.photo_url}')" style="background-color: red;">حذف</button>
+      </div>
+    `;
+
+    patientsList.appendChild(card);
+  });
+}
+
+async function getSignedUrl(path) {
+  return {
+    signedUrl: `${supabaseUrl}/storage/v1/object/public/${bucketName}/${path}`
+  };
+}
+
+function openPatient(code) {
+  window.location.href = `patient.html?code=${code}`;
+}
+
+async function deletePatient(code, photoPath) {
+  if (!confirm("هل أنت متأكد أنك تريد حذف هذا المريض؟")) return;
+
+  try {
+    if (photoPath) await deleteFromStorage(photoPath);
+    await deleteFolder(code);
+
+    const response = await fetch(`${supabaseUrl}/rest/v1/${tableName}?code=eq.${code}`, {
+      method: "DELETE",
+      headers: {
+        apikey: supabaseKey,
+        Authorization: `Bearer ${supabaseKey}`,
+      },
+    });
+
+    if (!response.ok) {
+      alert('❌ حدث خطأ أثناء الحذف');
+    } else {
+      alert('✅ تم الحذف بنجاح');
+      searchPatients();
+    }
+  } catch (error) {
+    console.error(error);
+    alert('❌ حدث خطأ غير متوقع');
+  }
+}
+
+async function deleteFromStorage(filePath) {
+  const response = await fetch(`${supabaseUrl}/storage/v1/object/${bucketName}/${filePath}`, {
+    method: "DELETE",
+    headers: {
+      apikey: supabaseKey,
+      Authorization: `Bearer ${supabaseKey}`,
+    },
+  });
+  return response.ok;
+}
+
+async function deleteFolder(code) {
+  const response = await fetch(`${supabaseUrl}/storage/v1/object/list/${bucketName}?prefix=${code}/`, {
+    headers: {
+      apikey: supabaseKey,
+      Authorization: `Bearer ${supabaseKey}`,
+    },
+  });
+
+  if (!response.ok) return;
+
+  const files = await response.json();
+  for (const file of files) {
+    await deleteFromStorage(file.name);
+  }
+}
+
+  </script>
+
+<section class="contact">
+  <h1>. </h1>
+  <p>.</p>
+  <p>.</p>
+</section>
+
+
+<footer>
+  <div class="footer-content">
+    <div class="social-icons">
+      <a href="https://www.facebook.com/mohamed.alsayed.219557/?locale=ar_AR" target="_blank"><i class="fab fa-facebook"></i></a>
+      <a href="tel:+01004335462"><i class="fas fa-phone-alt"></i></a>
+      <a href="https://wa.me/01004335462" target="_blank"><i class="fab fa-whatsapp"></i></a> <!-- رابط WhatsApp -->
+      <span>Copyright © 2025 – Prof.Dr Hayam Rashed || Developed by Mohamed Elsayed</span>
+    </div>
+  </div>
+</footer>
+
+<!-- رابط لأيقونات FontAwesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+</body>
+</html>
