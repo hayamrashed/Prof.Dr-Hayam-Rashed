@@ -6,38 +6,61 @@ const bucketName = "photo";
 const searchInput = document.getElementById("searchInput");
 const patientsList = document.getElementById("patientsList");
 
-async function searchPatients() {
-  const searchTerm = searchInput.value.trim();
+// ✅ دالة تنظيف النصوص (همزات + تشكيل + مسافات)
+function normalizeText(text) {
+  return text
+    .toLowerCase()
+    .replace(/\s/g, '')
+    .replace(/[إأآا]/g, 'ا')
+    .replace(/ى/g, 'ي')
+    .replace(/ؤ/g, 'و')
+    .replace(/ئ/g, 'ي')
+    .replace(/[ًٌٍَُِّْ]/g, '');
+}
 
-  if (searchTerm.length === 0) {
+// ✅ البحث الذكي
+async function searchPatients() {
+  const inputRaw = searchInput.value.trim();
+  const inputNormalized = normalizeText(inputRaw);
+
+  if (inputNormalized.length === 0) {
     patientsList.innerHTML = "";
     return;
   }
- 
-  const { data, error } = await fetchPatientsByName(searchTerm);
+
+  const { data, error } = await fetchPatientsByName(inputRaw);
 
   if (error) {
     console.error(error);
     return;
   }
 
-  renderPatients(data);
+  // ✅ ترتيب حسب البداية أو الاحتواء
+  const sorted = data.sort((a, b) => {
+    const nameA = normalizeText(a.patient_name);
+    const nameB = normalizeText(b.patient_name);
+    const startsWithA = nameA.startsWith(inputNormalized);
+    const startsWithB = nameB.startsWith(inputNormalized);
+
+    if (startsWithA && !startsWithB) return -1;
+    if (!startsWithA && startsWithB) return 1;
+    return nameA.localeCompare(nameB);
+  });
+
+  renderPatients(sorted);
 }
 
-// ✅ دالة البحث مع دعم عدم حساسية الحروف + حل مشكلة pagination
+// ✅ جلب البيانات من Supabase
 async function fetchPatientsByName(name) {
-  const lowercase = name.toLowerCase();
-  const capitalized = name.charAt(0).toUpperCase() + name.slice(1).toLowerCase();
-
-  // ✅ يبحث في أي جزء من الاسم (ولاء، عبد، علي، ..الخ)
-  const query = `or=(patient_name.ilike.*${lowercase}*,patient_name.ilike.*${capitalized}*)`;
+  const cleaned = name.trim().replace(/\s+/g, ' ');
+  const encoded = encodeURIComponent(`%${cleaned}%`);
+  const query = `patient_name=ilike.${encoded}`;
 
   const response = await fetch(`${supabaseUrl}/rest/v1/${tableName}?${query}`, {
     headers: {
       apikey: supabaseKey,
       Authorization: `Bearer ${supabaseKey}`,
-      Range: "0-999",              // ✅ يجلب حتى 1000 نتيجة
-      "Range-Unit": "items"
+      Prefer: "count=exact"
     },
   });
 
@@ -45,6 +68,7 @@ async function fetchPatientsByName(name) {
   return { data };
 }
 
+// ✅ عرض النتائج
 function renderPatients(patients) {
   patientsList.innerHTML = "";
 
@@ -79,6 +103,7 @@ function renderPatients(patients) {
   });
 }
 
+// ✅ رابط الصورة
 async function getSignedUrl(path) {
   const response = await fetch(`${supabaseUrl}/storage/v1/object/sign/${bucketName}/${path}`, {
     method: "POST",
@@ -89,27 +114,24 @@ async function getSignedUrl(path) {
     },
     body: JSON.stringify({ expiresIn: 3600 }),
   });
+
   if (response.ok) {
     return { signedUrl: `${supabaseUrl}/storage/v1/object/public/${bucketName}/${path}` };
   }
   return {};
 }
 
+// ✅ فتح صفحة المريض
 function openPatient(code) {
   window.location.href = `patient2.html?code=${code}`;
 }
 
-// ✅ دالة لحذف المريض من قاعدة البيانات والصور
+// ✅ حذف مريض بالكامل
 async function deletePatient(code, photoPath) {
-  if (!confirm("هل أنت متأكد أنك تريد حذف هذا المريض؟")) {
-    return;
-  }
+  if (!confirm("هل أنت متأكد أنك تريد حذف هذا المريض؟")) return;
 
   try {
-    if (photoPath) {
-      await deleteFromStorage(photoPath);
-    }
-
+    if (photoPath) await deleteFromStorage(photoPath);
     await deleteFolder(code);
 
     const { error } = await fetch(`${supabaseUrl}/rest/v1/${tableName}?code=eq.${code}`, {
@@ -134,7 +156,7 @@ async function deletePatient(code, photoPath) {
   }
 }
 
-// ✅ حذف صورة أو ملف من التخزين
+// ✅ حذف صورة من التخزين
 async function deleteFromStorage(filePath) {
   const response = await fetch(`${supabaseUrl}/storage/v1/object/${bucketName}/${filePath}`, {
     method: "DELETE",
@@ -146,7 +168,7 @@ async function deleteFromStorage(filePath) {
   return response.ok;
 }
 
-// ✅ حذف مجلد كامل (جميع الصور الإضافية)
+// ✅ حذف مجلد صور كامل
 async function deleteFolder(code) {
   const response = await fetch(`${supabaseUrl}/storage/v1/object/list/${bucketName}?prefix=${code}/`, {
     headers: {
@@ -158,7 +180,6 @@ async function deleteFolder(code) {
   if (!response.ok) return;
 
   const files = await response.json();
-
   for (const file of files) {
     await deleteFromStorage(file.name);
   }
