@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <title>بحث في التقارير بالتشخيص</title>
+  <style>
+    body {
+      font-family: Arial;
+      direction: rtl;
+      padding: 20px;
+      background-color: #f5f5f5;
+    }
+    input, button {
+      padding: 10px;
+      font-size: 16px;
+    }
+    .report-card {
+      background: #fff;
+      padding: 15px;
+      margin-bottom: 10px;
+      box-shadow: 0 0 5px #ccc;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-radius: 8px;
+    }
+    .report-actions button {
+      padding: 5px 12px;
+      background: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    
+    /* الهيدر */
+    .site-header {
+      background-color: #04243f;
+      color: white;
+      padding: 15px 0;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+    .container {
+      width: 90%;
+      margin: auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: relative;
+    }
+    .logo {
+  display: flex;
+  align-items: center;
+}
+
+.logo-img {
+  width: 50px; /* حجم اللوجو */
+  height: 50px;
+  object-fit: contain;
+  margin-right: 10px; /* مسافة بين الصورة والنص */
+}
+
+.logo h1 {
+  margin: 0;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+    .nav-links {
+      display: flex;
+    }
+    .nav-links a {
+      color: white;
+      text-decoration: none;
+      margin-left: 20px;
+      font-size: 16px;
+      transition: color 0.3s;
+    }
+    .nav-links a:hover {
+      color: #4CAF50;
+    }
+    .menu-icon {
+      display: none;
+      font-size: 26px;
+      cursor: pointer;
+    }
+
+    .description {
+      background-color: rgba(255, 255, 255, 0.8);
+      margin: 40px auto 20px;
+      padding: 20px 30px;
+      border-radius: 15px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      text-align: center;
+      font-size: 24px;
+      font-weight: bold;
+      color: #004d40;
+      width: 80%;
+      max-width: 600px;
+    }
+
+    .cards-container {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      margin: 40px 20px;
+      flex-wrap: wrap;
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.9);
+      padding: 30px 20px;
+      border-radius: 15px;
+      width: 220px;
+      text-align: center;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      transition: transform 0.3s, box-shadow 0.3s;
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    .card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+    }
+
+    .card button {
+      background: linear-gradient(135deg, #00bfa5, #00695c);
+      border: none;
+      padding: 15px 25px;
+      color: white;
+      font-size: 18px;
+      font-weight: bold;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .card button:hover {
+      background: linear-gradient(135deg, #00897b, #004d40);
+    }
+
+    /* تواصل معنا */
+    .contact {
+      background-color: #04243f;
+      color: white;
+      padding: 60px 20px;
+      text-align: center;
+    }
+    .contact h2 {
+      font-size: 30px;
+      margin-bottom: 20px;
+    }
+    .contact p {
+      font-size: 16px;
+      margin-bottom: 10px;
+    }
+
+    footer {
+    background: #031a2d;
+    color: white;
+    text-align: center;
+    padding: 15px 10px;
+    font-size: 14px;
+  }
+  
+  .footer-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .footer-content span {
+    margin-right: 15px; /* المسافة بين النص والأيقونات */
+  }
+  
+  .social-icons a {
+    margin: 0 10px;
+    color: white;
+    font-size: 20px;
+    text-decoration: none;
+  }
+  
+  .social-icons a:hover {
+    color: #ff9800; /* تغيير اللون عند التمرير */
+  }
+
+  </style>
+</head>
+<body>
+<header class="site-header">
+        <div class="container">
+          <div class="logo">
+            <img src="logo.png" alt="Logo" class="logo-img">
+            <h1>Prof.Dr Hayam Rashed</h1>
+          </div>
+      
+          <nav class="nav-links" id="navLinks">
+              <a href="index.html">Home</a>
+              <a href="search.html">search&Reports</a>
+              <a href="Cytology Report.html">Cytology Report</a>
+              <a href="Pathology Report.html">Pathology Report</a>
+              <a href="IHC Report.html">IHC Report</a>
+
+          </nav>
+      
+          <div class="menu-icon" onclick="toggleMenu()">☰</div>
+        </div>
+      
+        <script>
+          function toggleMenu() {
+            var nav = document.getElementById('navLinks');
+            if (nav.style.display === "flex") {
+              nav.style.display = "none";
+            } else {
+              nav.style.display = "flex";
+            }
+          }
+        </script>
+      </header>
+  <h2>🔍 البحث في التقارير حسب التشخيص</h2>
+  <input type="text" id="searchInput" placeholder="اكتب جزء من التشخيص هنا...">
+  <button onclick="searchReports()">بحث</button>
+
+  <div id="patientsList" style="margin-top: 30px;"></div>
+
+  <script>
+    const supabaseUrl = "https://bnmgxpkqjhhhccaroibc.supabase.co";
+    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJubWd4cGtxamhoaGNjYXJvaWJjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDU2ODM1ODksImV4cCI6MjA2MTI1OTU4OX0.tnIIQZWYr5NuZfjTWAdMgPYde6wTIFq08secQnqAnRs';
+    const tableName = "immunohistochemistry_report";
+
+    const searchInput = document.getElementById("searchInput");
+    const patientsList = document.getElementById("patientsList");
+
+    function normalizeText(text) {
+      return text
+        .toLowerCase()
+        .replace(/\s/g, '')
+        .replace(/[إأآا]/g, 'ا')
+        .replace(/ى/g, 'ي')
+        .replace(/ؤ/g, 'و')
+        .replace(/ئ/g, 'ي')
+        .replace(/[ًٌٍَُِّْ]/g, '');
+    }
+
+    async function searchReports() {
+      const inputRaw = searchInput.value.trim();
+      const inputNormalized = normalizeText(inputRaw);
+
+      if (inputNormalized.length === 0) {
+        patientsList.innerHTML = "<p>يرجى إدخال كلمة للبحث.</p>";
+        return;
+      }
+
+      const { data, error } = await fetchReportsByDiagnosis(inputRaw);
+
+      if (error) {
+        console.error("❌ خطأ أثناء جلب البيانات:", error);
+        patientsList.innerHTML = "<p>حدث خطأ في البحث.</p>";
+        return;
+      }
+
+      renderReports(data);
+    }
+
+    async function fetchReportsByDiagnosis(keyword) {
+      const cleaned = keyword.trim().replace(/\s+/g, ' ');
+      const encoded = encodeURIComponent(`%${cleaned}%`);
+      const query = `diagnosis=ilike.${encoded}`;
+
+      const response = await fetch(`${supabaseUrl}/rest/v1/${tableName}?${query}`, {
+        headers: {
+          apikey: supabaseKey,
+          Authorization: `Bearer ${supabaseKey}`,
+          Prefer: "count=exact"
+        },
+      });
+
+      const data = await response.json();
+      return { data };
+    }
+
+    function renderReports(reports) {
+      patientsList.innerHTML = "";
+
+      if (reports.length === 0) {
+        patientsList.innerHTML = "<p>لا توجد نتائج.</p>";
+        return;
+      }
+
+      reports.forEach((report) => {
+        const card = document.createElement("div");
+        card.className = "report-card";
+
+        card.innerHTML = `
+          <div class="report-info">
+            <h3>📄 ${report.report_name || "بدون اسم تقرير"}</h3>
+          </div>
+          <div class="report-actions">
+            <button onclick="openPatient('${report.code}')">عرض</button>
+          </div>
+        `;
+
+        patientsList.appendChild(card);
+      });
+    }
+
+    function openPatient(code) {
+  window.open(`patient.html?code=${code}`, '_blank');
+}
+
+  </script>
+
+<section class="contact">
+    <h2>. </h2>
+    <p>.</p>
+    <p>.</p>
+  </section>
+  
+  <footer>
+    <div class="footer-content">
+      <div class="social-icons">
+        <a href="https://www.facebook.com/mohamed.alsayed.219557/?locale=ar_AR" target="_blank"><i class="fab fa-facebook"></i></a>
+        <a href="tel:+01004335462"><i class="fas fa-phone-alt"></i></a>
+        <a href="https://wa.me/01004335462" target="_blank"><i class="fab fa-whatsapp"></i></a> <!-- رابط WhatsApp -->
+        <span>Copyright © 2025 – Prof.Dr Hayam Rashed || Developed by Mohamed Elsayed</span>
+      </div>
+    </div>
+  </footer>
+  
+  <!-- رابط لأيقونات FontAwesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  
+
+</body>
+</html>

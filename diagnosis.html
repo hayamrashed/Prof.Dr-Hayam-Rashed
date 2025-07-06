@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <title>البحث عن التقارير</title>
+  <style>
+    body {
+  font-family: 'Cairo', sans-serif;
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  background-image: url('https://images.unsplash.com/photo-1579154204601-01588a002ec7?ixlib=rb-4.0.3&auto=format&fit=crop&w=1950&q=80');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  display: flex;
+  flex-direction: column;
+  direction: rtl;
+}
+
+/* الهيدر */
+.site-header {
+  background-color: #04243f;
+  color: white;
+  padding: 15px 0;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.container {
+  width: 90%;
+  margin: auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+}
+
+.logo-img {
+  width: 50px;
+  height: 50px;
+  object-fit: contain;
+  margin-right: 10px;
+}
+
+.logo h1 {
+  margin: 0;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.nav-links {
+  display: flex;
+}
+.nav-links a {
+  color: white;
+  text-decoration: none;
+  margin-left: 20px;
+  font-size: 16px;
+  transition: color 0.3s;
+}
+.nav-links a:hover {
+  color: #4CAF50;
+}
+.menu-icon {
+  display: none;
+  font-size: 26px;
+  cursor: pointer;
+}
+
+.description {
+  background-color: rgba(255, 255, 255, 0.8);
+  margin: 40px auto 20px;
+  padding: 20px 30px;
+  border-radius: 15px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  text-align: center;
+  font-size: 24px;
+  font-weight: bold;
+  color: #004d40;
+  width: 80%;
+  max-width: 600px;
+}
+
+.cards-container {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  margin: 40px 20px;
+  flex-wrap: wrap;
+}
+
+.card {
+  background: rgba(255, 255, 255, 0.9);
+  padding: 30px 20px;
+  border-radius: 15px;
+  width: 220px;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  transition: transform 0.3s, box-shadow 0.3s;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+}
+
+.card button {
+  background: linear-gradient(135deg, #ff6f00, #f57c00);
+  border: none;
+  padding: 15px 25px;
+  color: white;
+  font-size: 18px;
+  font-weight: bold;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background 0.3s, transform 0.2s;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+}
+
+.card button:hover {
+  background: linear-gradient(135deg, #e65100, #bf360c);
+  transform: scale(1.05);
+}
+
+/* تواصل معنا */
+.contact {
+  background-color: #04243f;
+  color: white;
+  padding: 60px 20px;
+  text-align: center;
+}
+.contact h2 {
+  font-size: 30px;
+  margin-bottom: 20px;
+}
+.contact p {
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+
+footer {
+  background: #031a2d;
+  color: white;
+  text-align: center;
+  padding: 15px 10px;
+  font-size: 14px;
+}
+
+.footer-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.footer-content span {
+  margin-right: 15px;
+}
+
+.social-icons a {
+  margin: 0 10px;
+  color: white;
+  font-size: 20px;
+  text-decoration: none;
+}
+
+.social-icons a:hover {
+  color: #ff9800;
+}
+
+
+  </style>
+</head>
+
+<body>
+
+    <header class="site-header">
+        <div class="container">
+          <div class="logo">
+            <img src="logo.png" alt="Logo" class="logo-img">
+            <h1>Prof.Dr Hayam Rashed</h1>
+          </div>
+      
+          <nav class="nav-links" id="navLinks">
+              <a href="index.html">Home</a>
+              <a href="search.html">search&Reports</a>
+              <a href="Cytology Report.html">Cytology Report</a>
+              <a href="Pathology Report.html">Pathology Report</a>
+              <a href="IHC Report.html">IHC Report</a>
+
+          </nav>
+      
+          <div class="menu-icon" onclick="toggleMenu()">☰</div>
+        </div>
+      
+        <script>
+          function toggleMenu() {
+            var nav = document.getElementById('navLinks');
+            if (nav.style.display === "flex") {
+              nav.style.display = "none";
+            } else {
+              nav.style.display = "flex";
+            }
+          }
+        </script>
+      </header>
+
+<div class="description">
+  الرجاء اختيار نوع التقرير الذي تريد البحث فيه بين المرضى:
+</div>
+
+<div class="cards-container">
+  <a href="diagnosis2.html" class="card">
+    <button> IHC Report</button>
+  </a>
+  <a href="diagnosis1.html" class="card">
+    <button> Pathology Report</button>
+  </a>
+  <a href="diagnosis3.html" class="card">
+    <button>Cytology Report</button>
+  </a>
+</div>
+
+<section class="contact">
+    <h2>. </h2>
+    <p>.</p>
+    <p>.</p>
+  </section>
+  
+  <footer>
+    <div class="footer-content">
+      <div class="social-icons">
+        <a href="https://www.facebook.com/mohamed.alsayed.219557/?locale=ar_AR" target="_blank"><i class="fab fa-facebook"></i></a>
+        <a href="tel:+01004335462"><i class="fas fa-phone-alt"></i></a>
+        <a href="https://wa.me/01004335462" target="_blank"><i class="fab fa-whatsapp"></i></a> <!-- رابط WhatsApp -->
+        <span>Copyright © 2025 – Prof.Dr Hayam Rashed || Developed by Mohamed Elsayed</span>
+      </div>
+    </div>
+  </footer>
+  
+  <!-- رابط لأيقونات FontAwesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  
+
+</body>
+</html>
