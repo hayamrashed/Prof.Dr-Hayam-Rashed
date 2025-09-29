@@ -11,7 +11,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Amiri&family=Cairo&family=Changa&family=Noto+Kufi+Arabic&display=swap" rel="stylesheet">
 
   <style>
-    #toolbar button, #toolbar select {
+    #toolbar button, #toolbar select, #toolbar input[type=range] {
       margin-left: 5px;
       padding: 5px 10px;
       font-size: 14px;
@@ -30,6 +30,13 @@
       z-index: 1000;
     }
 
+    /* نص مخصص للعرض الحالي للسلايدر */
+    #widthValue {
+      font-weight: bold;
+      margin-left: 8px;
+      font-size: 14px;
+    }
+
     .bold-title {
       margin-bottom: 10px;
     }
@@ -38,6 +45,13 @@
       #toolbar {
         display: none !important;
       }
+    }
+
+    /* نجعل المربع النصي قابلاً لتغيير العرض */
+    #patientReportContent {
+      max-width: 100%;
+      transition: width 0.3s ease;
+      margin: auto;
     }
   </style>
 </head>
@@ -50,52 +64,58 @@
   <button type="button" onclick="document.execCommand('underline', false, null)">تسطير</button>
   <button type="button" onclick="document.execCommand('italic', false, null)">مائل</button>
   <button type="button" onclick="document.execCommand('justifyFull', false, null)">ضبط النص</button>
+
   <select onchange="document.execCommand('fontName', false, this.value)">
-  <!-- خطوط إنجليزية شائعة -->
-  <option value="Arial">Arial</option>
-  <option value="Tahoma">Tahoma</option>
-  <option value="Verdana">Verdana</option>
-  <option value="Times New Roman">Times New Roman</option>
-  <option value="Courier New">Courier New</option>
-  <option value="Georgia">Georgia</option>
-  <option value="Comic Sans MS">Comic Sans MS</option>
-  <option value="Lucida Console">Lucida Console</option>
-  <option value="Impact">Impact</option>
+    <!-- خطوط إنجليزية شائعة -->
+    <option value="Arial">Arial</option>
+    <option value="Tahoma">Tahoma</option>
+    <option value="Verdana">Verdana</option>
+    <option value="Times New Roman">Times New Roman</option>
+    <option value="Courier New">Courier New</option>
+    <option value="Georgia">Georgia</option>
+    <option value="Comic Sans MS">Comic Sans MS</option>
+    <option value="Lucida Console">Lucida Console</option>
+    <option value="Impact">Impact</option>
 
-  <!-- خطوط عربية من Google Fonts -->
-  <option value="Cairo">Cairo (عربي)</option>
-  <option value="Amiri">Amiri (عربي)</option>
-  <option value="Changa">Changa (عربي)</option>
-  <option value="Noto Kufi Arabic">Noto Kufi Arabic (عربي)</option>
-</select>
+    <!-- خطوط عربية من Google Fonts -->
+    <option value="Cairo">Cairo (عربي)</option>
+    <option value="Amiri">Amiri (عربي)</option>
+    <option value="Changa">Changa (عربي)</option>
+    <option value="Noto Kufi Arabic">Noto Kufi Arabic (عربي)</option>
+  </select>
 
+  <select onchange="applyRealFontSize(this.value)">
+    <option value="8px">8</option>
+    <option value="10px">10</option>
+    <option value="12px">12</option>
+    <option value="14px">14</option>
+    <option value="16px">16</option>
+    <option value="18px">18</option>
+    <option value="20px">20</option>
+    <option value="24px">24</option>
+    <option value="28px">28</option>
+    <option value="32px">32</option>
+    <option value="36px">36</option>
+    <option value="40px">40</option>
+    <option value="45px">45</option>
+    <option value="50px">50</option>
+  </select>
 
-<select onchange="applyRealFontSize(this.value)">
-  <option value="8px">8</option>
-  <option value="10px">10</option>
-  <option value="12px">12</option>
-  <option value="14px">14</option>
-  <option value="16px">16</option>
-  <option value="18px">18</option>
-  <option value="20px">20</option>
-  <option value="24px">24</option>
-  <option value="28px">28</option>
-  <option value="32px">32</option>
-  <option value="36px">36</option>
-  <option value="40px">40</option>
-  <option value="45px">45</option>
-  <option value="50px">50</option>
-</select>
   <button onclick="moveBoldTitleUp()">⬆️ لأعلى</button>
   <button onclick="moveBoldTitleDown()">⬇️ لأسفل</button>
+
+  <!-- شريط التحكم في عرض المربع النصي -->
+  <label for="widthSlider">عرض المربع:</label>
+  <input type="range" id="widthSlider" min="300" max="1200" value="800">
+  <span id="widthValue">800px</span>
 </div>
 
 <div id="patientReport" class="report-container">
-    <div class="signature"><br><br><div class="right-signature"></div></div>
+  <div class="signature"><br><br><div class="right-signature"></div></div>
   <div class="signature"><br><br><div class="right-signature"></div></div>
   <div class="signature"><br><br><div class="right-signature"></div></div>
 
-  <div id="patientReportContent">
+  <div id="patientReportContent" style="width:800px;">
     <div class="report-header-grid">
       <div class="wide-field"><strong>Patient Name:</strong> <span id="patient_name" contenteditable="true">اسم المريض</span></div>
       <div><strong>Age:</strong> <span id="age" contenteditable="true">30</span></div>
@@ -153,7 +173,6 @@
   <button onclick="generateAndDownloadQR()">QR Code</button>
   <button onclick="window.location.href='edit_patient2.html'">edit</button>
   <button onclick="window.location.href='Searchpayments.html'">Search payments</button>
-  <button onclick="window.location.href='diagnosis1.html'">archives</button>
   <button onclick="history.back()" style="padding: 10px 20px; background-color: #007bff; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 16px;">
     رجوع للخلف
   </button>  
@@ -212,6 +231,16 @@
     selection.removeAllRanges();
     selection.addRange(range);
   }
+
+  // كود التحكم في عرض المربع النصي
+  const widthSlider = document.getElementById('widthSlider');
+  const widthValue = document.getElementById('widthValue');
+  const reportContent = document.getElementById('patientReportContent');
+
+  widthSlider.addEventListener('input', function () {
+    reportContent.style.width = this.value + 'px';
+    widthValue.textContent = this.value + 'px';
+  });
 </script>
 
 </body>
