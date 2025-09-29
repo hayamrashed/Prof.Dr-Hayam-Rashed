@@ -9,7 +9,7 @@
   <script src="https://cdn.jsdelivr.net/npm/qrious@4.0.2/dist/qrious.min.js"></script>
   <link href="https://fonts.googleapis.com/css2?family=Amiri&family=Cairo&family=Changa&family=Noto+Kufi+Arabic&display=swap" rel="stylesheet">
 
-  <style>
+  <style>  
     .site-header {
       background-color: #04243f;
       color: white;
@@ -93,7 +93,9 @@
       }
     }
 
-    #toolbar button, #toolbar select {
+    #toolbar button, 
+    #toolbar select, 
+    #toolbar input[type=range] {
       margin-left: 5px;
       padding: 5px 10px;
       font-size: 14px;
@@ -112,6 +114,11 @@
       z-index: 1000;
     }
 
+    #widthValue {
+      font-weight: bold;
+      margin-left: 5px;
+    }
+
     @media print {
       #toolbar {
         display: none !important;
@@ -120,6 +127,14 @@
 
     .bold-title {
       margin-bottom: 10px; /* Default space between sections */
+    }
+
+    /* نجعل التقرير قابل لتغيير العرض */
+    #patientReport {
+      width: 800px;
+      max-width: 100%;
+      margin: auto;
+      transition: width 0.3s ease;
     }
   </style>
 </head>
@@ -132,44 +147,50 @@
   <button type="button" onclick="document.execCommand('underline', false, null)">تسطير</button>
   <button type="button" onclick="document.execCommand('italic', false, null)">مائل</button>
   <button type="button" onclick="document.execCommand('justifyFull', false, null)">ضبط النص</button>
+  
   <select onchange="document.execCommand('fontName', false, this.value)">
-  <!-- خطوط إنجليزية شائعة -->
-  <option value="Arial">Arial</option>
-  <option value="Tahoma">Tahoma</option>
-  <option value="Verdana">Verdana</option>
-  <option value="Times New Roman">Times New Roman</option>
-  <option value="Courier New">Courier New</option>
-  <option value="Georgia">Georgia</option>
-  <option value="Comic Sans MS">Comic Sans MS</option>
-  <option value="Lucida Console">Lucida Console</option>
-  <option value="Impact">Impact</option>
+    <!-- خطوط إنجليزية -->
+    <option value="Arial">Arial</option>
+    <option value="Tahoma">Tahoma</option>
+    <option value="Verdana">Verdana</option>
+    <option value="Times New Roman">Times New Roman</option>
+    <option value="Courier New">Courier New</option>
+    <option value="Georgia">Georgia</option>
+    <option value="Comic Sans MS">Comic Sans MS</option>
+    <option value="Lucida Console">Lucida Console</option>
+    <option value="Impact">Impact</option>
 
-  <!-- خطوط عربية من Google Fonts -->
-  <option value="Cairo">Cairo (عربي)</option>
-  <option value="Amiri">Amiri (عربي)</option>
-  <option value="Changa">Changa (عربي)</option>
-  <option value="Noto Kufi Arabic">Noto Kufi Arabic (عربي)</option>
-</select>
+    <!-- خطوط عربية -->
+    <option value="Cairo">Cairo (عربي)</option>
+    <option value="Amiri">Amiri (عربي)</option>
+    <option value="Changa">Changa (عربي)</option>
+    <option value="Noto Kufi Arabic">Noto Kufi Arabic (عربي)</option>
+  </select>
 
+  <select onchange="applyRealFontSize(this.value)">
+    <option value="8px">8</option>
+    <option value="10px">10</option>
+    <option value="12px">12</option>
+    <option value="14px">14</option>
+    <option value="16px">16</option>
+    <option value="18px">18</option>
+    <option value="20px">20</option>
+    <option value="24px">24</option>
+    <option value="28px">28</option>
+    <option value="32px">32</option>
+    <option value="36px">36</option>
+    <option value="40px">40</option>
+    <option value="45px">45</option>
+    <option value="50px">50</option>
+  </select>
 
-<select onchange="applyRealFontSize(this.value)">
-  <option value="8px">8</option>
-  <option value="10px">10</option>
-  <option value="12px">12</option>
-  <option value="14px">14</option>
-  <option value="16px">16</option>
-  <option value="18px">18</option>
-  <option value="20px">20</option>
-  <option value="24px">24</option>
-  <option value="28px">28</option>
-  <option value="32px">32</option>
-  <option value="36px">36</option>
-  <option value="40px">40</option>
-  <option value="45px">45</option>
-  <option value="50px">50</option>
-</select>
   <button onclick="moveBoldTitleUp()">⬆️ لأعلى</button>
   <button onclick="moveBoldTitleDown()">⬇️ لأسفل</button>
+
+  <!-- شريط التحكم في عرض التقرير -->
+  <label for="widthSlider">عرض التقرير:</label>
+  <input type="range" id="widthSlider" min="300" max="1200" value="800">
+  <span id="widthValue">800px</span>
 </div>
 
 <div id="patientReport" class="report-container">
@@ -180,18 +201,9 @@
     <div><strong>Patient Name:</strong> <span id="patient_name" contenteditable="true">اسم المريض</span></div>
     <div><strong>Age:</strong> <span id="age" contenteditable="true">30</span></div>
     <div><strong>Sex:</strong> <span id="sex" contenteditable="true">ذكر</span></div>
-  
-
-  
     <div><strong>Date Report Issued:</strong> <span id="date_report_issued" contenteditable="true">2025-05-22</span></div>
     <div><strong>Specimen Received Date:</strong> <span id="specimen_received_date" contenteditable="true">2025-05-20</span></div>
-  
-
-  
     <div><strong>Referred By:</strong> <span id="referred_by" contenteditable="true">د. أحمد</span></div>
-  
-
-  
     <div><strong>Patient Code:</strong> <span id="code" contenteditable="true">123456</span></div>
   </div>
 
@@ -232,7 +244,6 @@
   <button onclick="window.location.href='photo.html'">Load Visual Data Photos</button>
   <button onclick="generateAndDownloadQR()">QR Code</button>
   <button onclick="window.location.href='edit_patient1.html'">edit</button>
-  <button onclick="window.location.href='diagnosis2.html'">archives</button>
   <button onclick="window.location.href='Searchpayments.html'">Search payments</button>
   <button onclick="history.back()" style="padding: 10px 20px; background-color: #007bff; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 16px;">
     رجوع للخلف
@@ -241,7 +252,7 @@
 
 <div id="photosSection" class="photos-section"></div>
 
-<!-- JavaScript for margin movement -->
+<!-- JavaScript -->
 <script>
   function findAncestor(el, className) {
     while (el && el !== document.body) {
@@ -268,6 +279,36 @@
     const currentMargin = parseInt(window.getComputedStyle(targetDiv).marginBottom) || 0;
     targetDiv.style.marginBottom = (currentMargin + 20) + 'px';
   }
+
+  // إصلاح وظيفة تغيير حجم الخط
+  function applyRealFontSize(size) {
+    const selection = window.getSelection();
+    if (!selection.rangeCount) return;
+
+    const range = selection.getRangeAt(0);
+    if (range.collapsed) return;
+
+    const span = document.createElement("span");
+    span.style.fontSize = size;
+
+    span.appendChild(range.extractContents());
+    range.insertNode(span);
+
+    range.setStartAfter(span);
+    range.setEndAfter(span);
+    selection.removeAllRanges();
+    selection.addRange(range);
+  }
+
+  // التحكم في عرض التقرير
+  const widthSlider = document.getElementById('widthSlider');
+  const widthValue = document.getElementById('widthValue');
+  const report = document.getElementById('patientReport');
+
+  widthSlider.addEventListener('input', function () {
+    report.style.width = this.value + 'px';
+    widthValue.textContent = this.value + 'px';
+  });
 </script>
 
 <script src="patient.js"></script>
