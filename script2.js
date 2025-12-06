@@ -1,5 +1,8 @@
 // استيراد مكتبة Supabase
-import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
+import { createClient } from "https://esm.sh/v135/@supabase/supabase-js@2";
+
+console.log("Supabase loaded? =>", createClient);
+
 
 // إعداد Supabase
 const supabaseUrl = 'https://fbxphgrumfifpanlkbzd.supabase.co';
@@ -142,3 +145,4 @@ form.addEventListener('submit', async (e) => {
     await initializeCode(); // توليد كود جديد بعد الحفظ
   }
 });
+
