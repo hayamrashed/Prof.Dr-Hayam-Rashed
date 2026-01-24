@@ -1,25 +1,25 @@
+// يجب التأكد من استدعاء هذا السكريبت في HTML بـ type="module"
+// <script type="module" src="script2.js"></script>
+
 // استيراد مكتبة Supabase
 import { createClient } from "https://esm.sh/v135/@supabase/supabase-js@2";
 
 console.log("Supabase loaded? =>", createClient);
 
-
-// إعداد Supabase 
+// إعداد Supabase
 const supabaseUrl = 'https://fbxphgrumfifpanlkbzd.supabase.co';
 const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZieHBoZ3J1bWZpZnBhbmxrYnpkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDU4Mzg1NTQsImV4cCI6MjA2MTQxNDU1NH0.gaS2hTxSTniuedtKxTStMKC4e-72Y554aYTYGKEBoDE';
 const supabase = createClient(supabaseUrl, supabaseKey);
 
-// تعريف عناصر الصفحة
+// عناصر الصفحة
 const form = document.getElementById('patientForm');
 const statusDiv = document.getElementById('uploadStatus');
 
 // ---------------------------
-// وظائف مساعدة
-
 // توليد الكود التالي تلقائياً
 async function generateNextCode() {
   const { data, error } = await supabase
-    .from('pathology_report') // اسم الجدول الصحيح هنا
+    .from('pathology_report')
     .select('code')
     .order('id', { ascending: false })
     .limit(1);
@@ -48,7 +48,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 // ---------------------------
 // إعداد الكود مبدئياً
 async function initializeCode() {
-  const generatedCode = await generateNextCode();
   let codeInput = document.getElementById('code');
 
   if (!codeInput) {
@@ -58,6 +57,7 @@ async function initializeCode() {
     form.appendChild(codeInput);
   }
 
+  const generatedCode = await generateNextCode();
   codeInput.value = generatedCode;
 }
 
@@ -70,7 +70,6 @@ form.addEventListener('submit', async (e) => {
   const photoFile = document.getElementById('photo').files[0];
   const additionalPhotos = document.getElementById('additionalPhotos').files;
 
-  // التحقق من وجود الكود والصورة الأساسية
   if (!code || !photoFile) {
     statusDiv.textContent = '❌ يرجى إدخال الكود واختيار صورة الهوية';
     return;
@@ -132,7 +131,7 @@ form.addEventListener('submit', async (e) => {
 
   // حفظ البيانات في جدول pathology_report
   const { error: insertError } = await supabase
-    .from('pathology_report') // تأكد أن هذا اسم الجدول عندك
+    .from('pathology_report')
     .insert([formData]);
 
   if (insertError) {
