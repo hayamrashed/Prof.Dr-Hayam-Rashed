@@ -1,19 +1,11 @@
-// ---------------------------
-// يعمل مباشرة في المتصفح
-// HTML يجب أن يحتوي أولاً:
-// <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/supabase.min.js"></script>
-// ثم:
-// <script src="script2.js"></script>
-// ---------------------------
+// ================================
+// تهيئة Supabase (بدون import)
 
-// إنشاء عميل Supabase من الكائن العالمي الصحيح
-const supabaseUrl = 'https://fbxphgrumfifpanlkbzd.supabase.co';
+console.log("Supabase loaded:", supabase.createClient);
+
+const supabaseUrl = "https://bimyioebtynlhxqzwqge.supabase.co";
 const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZieHBoZ3J1bWZpZnBhbmxrYnpkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDU4Mzg1NTQsImV4cCI6MjA2MTQxNDU1NH0.gaS2hTxSTniuedtKxTStMKC4e-72Y554aYTYGKEBoDE';
-
-const supabaseClient = window.supabase.createClient(
-  supabaseUrl,
-  supabaseKey
-);
+const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
 
 // عناصر الصفحة
 const form = document.getElementById('patientForm');
@@ -120,3 +112,4 @@ form.addEventListener('submit', async (e) => {
     await initializeCode();
   }
 });
+
