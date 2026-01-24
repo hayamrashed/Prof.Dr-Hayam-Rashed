@@ -1,15 +1,14 @@
-// يجب التأكد من استدعاء هذا السكريبت في HTML بـ type="module"
-// <script type="module" src="script2.js"></script>
-
-// استيراد مكتبة Supabase
-import { createClient } from "https://esm.sh/v135/@supabase/supabase-js@2";
-
-console.log("Supabase loaded? =>", createClient);
+// ---------------------------
+// هذا السكريبت يعمل مباشرة في المتصفح
+// تأكد من إضافة هذا في HTML بعد تحميل مكتبة Supabase من CDN
+// <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/supabase.min.js"></script>
+// <script src="script2.js"></script>
+// ---------------------------
 
 // إعداد Supabase
 const supabaseUrl = 'https://fbxphgrumfifpanlkbzd.supabase.co';
 const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZieHBoZ3J1bWZpZnBhbmxrYnpkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDU4Mzg1NTQsImV4cCI6MjA2MTQxNDU1NH0.gaS2hTxSTniuedtKxTStMKC4e-72Y554aYTYGKEBoDE';
-const supabase = createClient(supabaseUrl, supabaseKey);
+const supabase = supabase.createClient(supabaseUrl, supabaseKey);
 
 // عناصر الصفحة
 const form = document.getElementById('patientForm');
