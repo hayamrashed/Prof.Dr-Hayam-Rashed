@@ -20,37 +20,34 @@ const form = document.getElementById("patientForm");
 const statusDiv = document.getElementById("uploadStatus");
 
 // ================================
-// توليد الكود التالي تلقائياً
+// توليد الكود التالي تلقائياً (يكمّل بعد D2370)
 
 async function generateNextCode() {
   const { data, error } = await supabaseClient
-    .from("pathology_report") // اسم الجدول
-    .select("code")
-    .ilike("code", "D%") // فقط الأكواد التي تبدأ بـ D
-    .not("code", "is", null);
+    .from("pathology_report")
+    .select("code");
 
   if (error) {
-    console.error(error);
-    return "D2371"; // fallback آمن
+    console.error("Generate code error:", error);
+    return "D2371";
   }
 
   if (!data || data.length === 0) {
     return "D2371";
   }
 
-  // استخراج الأرقام فقط
   const numbers = data
     .map(row => {
-      const match = row.code.match(/\d+/);
-      return match ? parseInt(match[0], 10) : null;
+      if (!row.code) return null;
+      const match = row.code.match(/^D(\d+)$/);
+      return match ? parseInt(match[1], 10) : null;
     })
     .filter(n => n !== null);
 
-  const maxNumber = Math.max(...numbers);
+  const maxNumber = numbers.length ? Math.max(...numbers) : 2370;
 
   return `D${maxNumber + 1}`;
 }
-
 
 // ================================
 // عند تحميل الصفحة
@@ -180,5 +177,3 @@ form.addEventListener("submit", async (e) => {
     await initializeCode();
   }
 });
-
-
