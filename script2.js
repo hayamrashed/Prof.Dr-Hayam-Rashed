@@ -24,34 +24,31 @@ const statusDiv = document.getElementById("uploadStatus");
 
 async function generateNextCode() {
   const { data, error } = await supabaseClient
-    .from("pathology_report") // أو الجدول المناسب
+    .from("pathology_report") // اسم الجدول
     .select("code")
-    .not("code", "is", null)      // تجاهل القيم الفارغة
-    .order("code", { ascending: false }) // الترتيب على الكود نفسه
-    .limit(1);
+    .ilike("code", "D%") // فقط الأكواد التي تبدأ بـ D
+    .not("code", "is", null);
 
   if (error) {
     console.error(error);
-    return "D1";
+    return "D2371"; // fallback آمن
   }
 
-  if (!data || data.length === 0 || !data[0].code) {
-    return "D1";
+  if (!data || data.length === 0) {
+    return "D2371";
   }
 
-  const lastCode = data[0].code;
+  // استخراج الأرقام فقط
+  const numbers = data
+    .map(row => {
+      const match = row.code.match(/\d+/);
+      return match ? parseInt(match[0], 10) : null;
+    })
+    .filter(n => n !== null);
 
-  const letterMatch = lastCode.match(/[A-Z]/);
-  const numberMatch = lastCode.match(/\d+/);
+  const maxNumber = Math.max(...numbers);
 
-  if (!letterMatch || !numberMatch) {
-    return "D1";
-  }
-
-  const letter = letterMatch[0];
-  const number = parseInt(numberMatch[0], 10) + 1;
-
-  return `${letter}${number}`;
+  return `D${maxNumber + 1}`;
 }
 
 
@@ -183,4 +180,5 @@ form.addEventListener("submit", async (e) => {
     await initializeCode();
   }
 });
+
 
