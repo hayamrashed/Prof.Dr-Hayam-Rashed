@@ -24,9 +24,10 @@ const statusDiv = document.getElementById("uploadStatus");
 
 async function generateNextCode() {
   const { data, error } = await supabaseClient
-    .from("pathology_report")
+    .from("pathology_report") // أو الجدول المناسب
     .select("code")
-    .order("id", { ascending: false })
+    .not("code", "is", null)      // تجاهل القيم الفارغة
+    .order("code", { ascending: false }) // الترتيب على الكود نفسه
     .limit(1);
 
   if (error) {
@@ -34,16 +35,25 @@ async function generateNextCode() {
     return "D1";
   }
 
-  if (!data || data.length === 0) {
+  if (!data || data.length === 0 || !data[0].code) {
     return "D1";
   }
 
   const lastCode = data[0].code;
-  const letter = lastCode.match(/[A-Z]/)[0];
-  const number = parseInt(lastCode.match(/\d+/)[0], 10) + 1;
+
+  const letterMatch = lastCode.match(/[A-Z]/);
+  const numberMatch = lastCode.match(/\d+/);
+
+  if (!letterMatch || !numberMatch) {
+    return "D1";
+  }
+
+  const letter = letterMatch[0];
+  const number = parseInt(numberMatch[0], 10) + 1;
 
   return `${letter}${number}`;
 }
+
 
 // ================================
 // عند تحميل الصفحة
@@ -173,3 +183,4 @@ form.addEventListener("submit", async (e) => {
     await initializeCode();
   }
 });
+
