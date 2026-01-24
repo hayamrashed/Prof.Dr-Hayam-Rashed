@@ -1,8 +1,16 @@
 // ---------------------------
-// إعداد Supabase بعد تحميل المكتبة من CDN
+// هذا السكريبت يعمل مباشرة في المتصفح
+// تأكد من إضافة هذا في HTML بعد تحميل مكتبة Supabase من CDN
+// <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/supabase.min.js"></script>
+// <script src="script2.js"></script>
+// ---------------------------
+
+// إعداد Supabase باستخدام الكائن العالمي بعد تحميل المكتبة
 const supabaseUrl = 'https://fbxphgrumfifpanlkbzd.supabase.co';
 const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZieHBoZ3J1bWZpZnBhbmxrYnpkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDU4Mzg1NTQsImV4cCI6MjA2MTQxNDU1NH0.gaS2hTxSTniuedtKxTStMKC4e-72Y554aYTYGKEBoDE';
-const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+
+// ❗ ملاحظة مهمة: استخدم Supabase.createClient وليس supabase.createClient
+const supabase = Supabase.createClient(supabaseUrl, supabaseKey);
 
 // عناصر الصفحة
 const form = document.getElementById('patientForm');
@@ -38,6 +46,7 @@ async function initializeCode() {
   codeInput.value = await generateNextCode();
 }
 
+// عند تحميل الصفحة
 document.addEventListener('DOMContentLoaded', initializeCode);
 
 // ---------------------------
@@ -80,7 +89,7 @@ form.addEventListener('submit', async (e) => {
     uploadedPhotoPaths.push(path);
   }
 
-  // حفظ البيانات في جدول pathology_report
+  // تجهيز بيانات النموذج
   const formData = {
     patient_name: document.getElementById('patientName').value.trim(),
     age: parseInt(document.getElementById('age').value),
@@ -99,6 +108,7 @@ form.addEventListener('submit', async (e) => {
     additional_photos: uploadedPhotoPaths,
   };
 
+  // حفظ البيانات في جدول pathology_report
   const { error: insertError } = await supabase.from('pathology_report').insert([formData]);
   if (insertError) {
     statusDiv.textContent = '❌ خطأ أثناء حفظ بيانات المريض';
