@@ -20,22 +20,23 @@ const form = document.getElementById("patientForm");
 const statusDiv = document.getElementById("uploadStatus");
 
 // ================================
-// توليد الكود التالي تلقائياً (يكمّل بعد D2370)
+// توليد الكود التالي تلقائياً (يبدأ بعد D2370)
 
 async function generateNextCode() {
   const { data, error } = await supabaseClient
-    .from("pathology_report")
+    .from("pathology_report") // اسم الجدول
     .select("code");
 
   if (error) {
     console.error("Generate code error:", error);
-    return "D2371";
+    return "D2371"; // fallback آمن
   }
 
   if (!data || data.length === 0) {
     return "D2371";
   }
 
+  // استخراج الأرقام فقط للأكواد التي تبدأ بـ D
   const numbers = data
     .map(row => {
       if (!row.code) return null;
