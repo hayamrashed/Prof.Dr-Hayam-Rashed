@@ -1,14 +1,11 @@
 // استيراد مكتبة Supabase
-import { createClient } from "https://esm.sh/v135/@supabase/supabase-js@2";
+import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
 
-console.log("Supabase loaded? =>", createClient);
+  console.log("Supabase loaded:", createClient);
 
-
-// إعداد Supabase
-const supabaseUrl = 'https://bimyioebtynlhxqzwqge.supabase.co';
-const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJpbXlpb2VidHlubGh4cXp3cWdlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDU4Mzg2OTAsImV4cCI6MjA2MTQxNDY5MH0.dDvpl3X5H4hQ9BSFXEdg_eV0NJVF7K8FcNJ-R5-HEcw';
-const supabase = createClient(supabaseUrl, supabaseKey);
-
+  const supabaseUrl = "https://bimyioebtynlhxqzwqge.supabase.co";
+  const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJpbXlpb2VidHlubGh4cXp3cWdlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDU4Mzg2OTAsImV4cCI6MjA2MTQxNDY5MH0.dDvpl3X5H4hQ9BSFXEdg_eV0NJVF7K8FcNJ-R5-HEcw';
+  const supabase = createClient(supabaseUrl, supabaseKey);
 // تعريف عناصر الصفحة
 const form = document.getElementById('patientForm');
 const statusDiv = document.getElementById('uploadStatus');
@@ -143,4 +140,5 @@ form.addEventListener('submit', async (e) => {
     await initializeCode(); // توليد كود جديد بعد الحفظ
   }
 });
+
 
