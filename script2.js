@@ -1,12 +1,17 @@
+// ================================
+// تهيئة Supabase (بدون import)
 
-
-console.log("Supabase loaded? =>", createClient);
-
+console.log("Supabase loaded? =>", supabase.createClient);
 
 // إعداد Supabase
-const supabaseUrl = 'https://fbxphgrumfifpanlkbzd.supabase.co';
-const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZieHBoZ3J1bWZpZnBhbmxrYnpkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDU4Mzg1NTQsImV4cCI6MjA2MTQxNDU1NH0.gaS2hTxSTniuedtKxTStMKC4e-72Y554aYTYGKEBoDE';
-const supabase = createClient(supabaseUrl, supabaseKey);
+const supabaseUrl = "https://bnmgxpkqjhhhccaroibc.supabase.co";
+const supabaseKey =
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJubWd4cGtxamhoaGNjYXJvaWJjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDU2ODM1ODksImV4cCI6MjA2MTI1OTU4OX0.tnIIQZWYr5NuZfjTWAdMgPYde6wTIFq08secQnqAnRs";
+
+const supabaseClient = supabase.createClient(
+  supabaseUrl,
+  supabaseKey
+);
 
 // تعريف عناصر الصفحة
 const form = document.getElementById('patientForm');
@@ -144,5 +149,6 @@ form.addEventListener('submit', async (e) => {
     await initializeCode(); // توليد كود جديد بعد الحفظ
   }
 });
+
 
 
