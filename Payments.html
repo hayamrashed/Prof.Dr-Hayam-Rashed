@@ -247,8 +247,8 @@ button:hover {
       <input type="number" name="remaining" id="remaining" readonly />
 
       <button type="submit">إرسال</button>
-      <button onclick="downloadReport()">📥 تحميل التقرير المالي</button>
     </form>
+     <button onclick="downloadReport()">📥 تحميل التقرير المالي</button>
   </div>
 
   <script>
@@ -304,7 +304,6 @@ button:hover {
 
     async function downloadReport() {
   try {
-    // 1. جلب البيانات
     const response = await fetch(`${SUPABASE_URL}/rest/v1/reports?select=*`, {
       headers: {
         'apikey': SUPABASE_API_KEY,
@@ -318,10 +317,6 @@ button:hover {
       alert("لا توجد بيانات");
       return;
     }
-
-    // =========================
-    // 2. تجهيز البيانات
-    // =========================
 
     let totalRequired = 0;
     let totalPaid = 0;
@@ -356,10 +351,7 @@ button:hover {
       }
     });
 
-    // =========================
-    // 3. إضافة الإجماليات
-    // =========================
-
+    // الإجماليات
     allData.push({});
     allData.push({
       "الاسم": "الإجمالي",
@@ -382,10 +374,6 @@ button:hover {
       "المبلغ المسدد": completedTotal
     });
 
-    // =========================
-    // 4. إنشاء ملف Excel
-    // =========================
-
     const wb = XLSX.utils.book_new();
 
     const sheet1 = XLSX.utils.json_to_sheet(allData);
@@ -396,15 +384,11 @@ button:hover {
     XLSX.utils.book_append_sheet(wb, sheet2, "عليهم باقي");
     XLSX.utils.book_append_sheet(wb, sheet3, "مدفوع بالكامل");
 
-    // =========================
-    // 5. تحميل الملف
-    // =========================
-
     XLSX.writeFile(wb, "financial_report.xlsx");
 
   } catch (error) {
     console.error(error);
-    alert("حدث خطأ أثناء تحميل التقرير");
+    alert("❌ حدث خطأ أثناء تحميل التقرير");
   }
 }
   </script>
