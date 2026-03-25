@@ -304,23 +304,16 @@ button:hover {
 
     async function downloadReport() {
   try {
-    const SUPABASE_URL = 'https://hepkpwvdpfkyetaskrbh.supabase.co';
-    const SUPABASE_API_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhlcGtwd3ZkcGZreWV0YXNrcmJoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ0NjE3MDMsImV4cCI6MjA5MDAzNzcwM30.6RTba0N9fhBtXpw1CWB83KjiDM7RkldqpsjZnzen4zY';
+    const SUPABASE_URLd = 'https://hepkpwvdpfkyetaskrbh.supabase.co';
+    const SUPABASE_API_KEYd = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhlcGtwd3ZkcGZreWV0YXNrcmJoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ0NjE3MDMsImV4cCI6MjA5MDAzNzcwM30.6RTba0N9fhBtXpw1CWB83KjiDM7RkldqpsjZnzen4zY';
 
-    const response = await fetch(`${SUPABASE_URL}/rest/v1/reports?select=*`, {
+    const response = await fetch(`${SUPABASE_URLd}/rest/v1/reports?select=*`, {
       headers: {
-        'apikey': SUPABASE_API_KEY,
-        'Authorization': `Bearer ${SUPABASE_API_KEY}`
+        'apikey': SUPABASE_API_KEYd,
+        'Authorization': `Bearer ${SUPABASE_API_KEYd}`
       }
     });
 
-    const data = await response.json();
-    console.log(data);
-
-  } catch (error) {
-    console.error(error);
-  }
-}
 
     const data = await response.json();
 
