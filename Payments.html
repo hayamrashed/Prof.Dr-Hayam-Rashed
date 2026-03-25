@@ -183,6 +183,7 @@ button:hover {
   }
 
   </style>
+  <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
 </head>
 <header class="site-header">
   <div class="container">
@@ -246,6 +247,7 @@ button:hover {
       <input type="number" name="remaining" id="remaining" readonly />
 
       <button type="submit">إرسال</button>
+      <button onclick="downloadReport()">📥 تحميل التقرير المالي</button>
     </form>
   </div>
 
@@ -297,6 +299,114 @@ button:hover {
         alert("⚠️ حدث خطأ أثناء الإرسال:\n" + error);
       }
     });
+
+
+
+    async function downloadReport() {
+  try {
+    // 1. جلب البيانات
+    const response = await fetch(`${SUPABASE_URL}/rest/v1/reports?select=*`, {
+      headers: {
+        'apikey': SUPABASE_API_KEY,
+        'Authorization': `Bearer ${SUPABASE_API_KEY}`
+      }
+    });
+
+    const data = await response.json();
+
+    if (!data || data.length === 0) {
+      alert("لا توجد بيانات");
+      return;
+    }
+
+    // =========================
+    // 2. تجهيز البيانات
+    // =========================
+
+    let totalRequired = 0;
+    let totalPaid = 0;
+    let totalRemaining = 0;
+
+    const allData = [];
+    const remainingData = [];
+    const completedData = [];
+
+    data.forEach(item => {
+      const total = Number(item.total) || 0;
+      const paid = Number(item.paid) || 0;
+      const remaining = Number(item.remaining) || 0;
+
+      totalRequired += total;
+      totalPaid += paid;
+      totalRemaining += remaining;
+
+      const row = {
+        "الاسم": item.name,
+        "المبلغ المطلوب": total,
+        "المبلغ المسدد": paid,
+        "الباقي": remaining
+      };
+
+      allData.push(row);
+
+      if (remaining > 0) {
+        remainingData.push(row);
+      } else {
+        completedData.push(row);
+      }
+    });
+
+    // =========================
+    // 3. إضافة الإجماليات
+    // =========================
+
+    allData.push({});
+    allData.push({
+      "الاسم": "الإجمالي",
+      "المبلغ المطلوب": totalRequired,
+      "المبلغ المسدد": totalPaid,
+      "الباقي": totalRemaining
+    });
+
+    let remainingTotal = remainingData.reduce((sum, r) => sum + r["الباقي"], 0);
+    remainingData.push({});
+    remainingData.push({
+      "الاسم": "إجمالي المتبقي",
+      "الباقي": remainingTotal
+    });
+
+    let completedTotal = completedData.reduce((sum, r) => sum + r["المبلغ المسدد"], 0);
+    completedData.push({});
+    completedData.push({
+      "الاسم": "إجمالي المسدد",
+      "المبلغ المسدد": completedTotal
+    });
+
+    // =========================
+    // 4. إنشاء ملف Excel
+    // =========================
+
+    const wb = XLSX.utils.book_new();
+
+    const sheet1 = XLSX.utils.json_to_sheet(allData);
+    const sheet2 = XLSX.utils.json_to_sheet(remainingData);
+    const sheet3 = XLSX.utils.json_to_sheet(completedData);
+
+    XLSX.utils.book_append_sheet(wb, sheet1, "كل البيانات");
+    XLSX.utils.book_append_sheet(wb, sheet2, "عليهم باقي");
+    XLSX.utils.book_append_sheet(wb, sheet3, "مدفوع بالكامل");
+
+    // =========================
+    // 5. تحميل الملف
+    // =========================
+
+    XLSX.writeFile(wb, "financial_report.xlsx");
+
+  } catch (error) {
+    console.error(error);
+    alert("حدث خطأ أثناء تحميل التقرير");
+  }
+}
   </script>
 </body>
   <footer>
